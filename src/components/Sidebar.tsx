@@ -65,7 +65,7 @@ export default function Sidebar({
       <div className={`w-[230px] bg-[var(--ink)] text-gray-200 flex flex-col h-screen sticky top-0 rounded-r-3xl m-4 p-6 transition-transform lg:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } fixed lg:static left-0 top-0 z-50 lg:z-auto lg:rounded-r-3xl lg:m-4 lg:sticky`}>
-      {/* Brand */}
+        {/* Brand */}
       <div className="flex items-center gap-2 mb-6 font-bold text-lg">
         <div
           className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-sm"
