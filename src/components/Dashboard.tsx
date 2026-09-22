@@ -137,7 +137,7 @@ function LoginPage({
   showPassword: boolean;
   onPasswordToggle: () => void;
 }) {
-  const roleDetails = {
+  const roleDetails: { [key: string]: { title: string; description: string; writes: string | string[]; icon: string; tag?: string } } = {
     ceo: {
       title: "Chief Executive Officer",
       description: "Direction, delegation and the decisions queue",
