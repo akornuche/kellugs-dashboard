@@ -310,7 +310,7 @@ function LoginPage({
 
                 <div className="mt-6 p-3 rounded-lg bg-red-50 border border-red-200">
                   <div className="text-xs text-red-800 mb-1">
-                    <span className="font-bold">ℹ️ Prototype sign-in.</span> Credentials are held in js/data.js, which any visitor's browser can read. This chooses which dashboard you are shown — it is not access control. A real deployment moves it to. Supabse auth with row-level security, where the server decides.
+                    <span className="font-bold">ℹ️ Prototype sign-in.</span> Credentials are held in js/data.js, which any visitor&apos;s browser can read. This chooses which dashboard you are shown — it is not access control. A real deployment moves it to Supabase auth with row-level security, where the server decides.
                   </div>
                 </div>
               </div>
