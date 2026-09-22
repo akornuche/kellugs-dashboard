@@ -25,25 +25,25 @@ export default function AdminView({
   };
 
   return (
-    <div className="max-w-7xl pb-20">
+    <div className="max-w-7xl pb-20 px-4 sm:px-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-6 mb-6 flex-wrap">
+      <div className="flex items-start justify-between gap-3 sm:gap-6 mb-6 flex-wrap">
         <div>
-          <h1 className="text-4xl font-bold mb-2">Admin</h1>
-          <p className="text-[var(--text-mute)] text-sm">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Admin</h1>
+          <p className="text-[var(--text-mute)] text-xs sm:text-sm">
             Accounts, HR administration and facilities · Ikeja & Lekki
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--bg)] text-sm font-medium transition"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--bg)] text-xs sm:text-sm font-medium transition"
           >
             Export <span>↗</span>
           </button>
           <button
             onClick={handleClosePeriod}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-black hover:bg-gray-900 text-white text-sm font-medium transition"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-black hover:bg-gray-900 text-white text-xs sm:text-sm font-medium transition whitespace-nowrap"
           >
             Close period <span>✓</span>
           </button>
@@ -51,10 +51,10 @@ export default function AdminView({
       </div>
 
       {/* Info Banner */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3 mb-6">
-        <div className="text-blue-600 font-bold text-xl">📋</div>
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 sm:p-4 flex gap-2 sm:gap-3 mb-6">
+        <div className="text-lg sm:text-xl flex-shrink-0">📋</div>
         <div>
-          <div className="text-sm font-bold text-blue-900">
+          <div className="text-xs sm:text-sm font-bold text-blue-900">
             Financial and HR records here are{" "}
             <span className="underline">sample data</span>.
           </div>
@@ -70,7 +70,7 @@ export default function AdminView({
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
           {
             lbl: "Reconciliation",
@@ -124,24 +124,24 @@ export default function AdminView({
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
         {/* Expense Lines Chart */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-          <h3 className="text-lg font-bold mb-2">Expense lines</h3>
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold mb-2">Expense lines</h3>
           <p className="text-xs text-[var(--text-mute)] mb-4">
             This period, in thousands — the separated lines the guides ask for
           </p>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={expenseData} margin={{ top: 20, right: 30, left: 0, bottom: 60 }}>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={expenseData} margin={{ top: 20, right: 30, left: -20, bottom: 60 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis
                 dataKey="name"
                 angle={-45}
                 textAnchor="end"
                 height={100}
-                tick={{ fill: "var(--text-mute)", fontSize: 12 }}
+                tick={{ fill: "var(--text-mute)", fontSize: 10 }}
               />
-              <YAxis tick={{ fill: "var(--text-mute)", fontSize: 12 }} />
+              <YAxis tick={{ fill: "var(--text-mute)", fontSize: 10 }} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "var(--card)",
@@ -156,8 +156,8 @@ export default function AdminView({
         </div>
 
         {/* Facilities & Compliance */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-          <h3 className="text-lg font-bold mb-2">Facilities & compliance</h3>
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold mb-2">Facilities & compliance</h3>
           <p className="text-xs text-[var(--text-mute)] mb-4">
             Safety items with a due date against each
           </p>
@@ -206,24 +206,24 @@ export default function AdminView({
             ].map((item, i) => (
               <div
                 key={i}
-                className={`p-3 rounded-lg border-l-4 ${
+                className={`p-2 sm:p-3 rounded-lg border-l-4 ${
                   item.color === "green"
                     ? "border-l-green-500 bg-green-50"
                     : "border-l-red-500 bg-red-50"
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="text-xs font-bold text-[var(--text-mute)] uppercase">
                       {item.org}
                     </div>
-                    <div className="font-semibold text-sm mt-1">{item.name}</div>
+                    <div className="font-semibold text-xs sm:text-sm mt-1 line-clamp-1">{item.name}</div>
                     <div className="text-xs text-[var(--text-mute)] mt-1">
                       {item.date}
                     </div>
                   </div>
                   <span
-                    className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
+                    className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap flex-shrink-0 ${
                       item.color === "green"
                         ? "bg-green-100 text-green-800"
                         : "bg-red-100 text-red-800"
@@ -239,16 +239,16 @@ export default function AdminView({
       </div>
 
       {/* Bottom Section */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Receivables */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-          <h3 className="text-lg font-bold mb-2">Receivables</h3>
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold mb-2">Receivables</h3>
           <p className="text-xs text-[var(--text-mute)] mb-4">
             Oldest first. A credit-policy exception is flagged rather than quietly
             granted.
           </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-[var(--border)]">
                   <th className="text-left p-2 font-semibold text-[var(--text-mute)]">
@@ -257,7 +257,7 @@ export default function AdminView({
                   <th className="text-left p-2 font-semibold text-[var(--text-mute)]">
                     Amount
                   </th>
-                  <th className="text-left p-2 font-semibold text-[var(--text-mute)]">
+                  <th className="text-left p-2 font-semibold text-[var(--text-mute)] hidden sm:table-cell">
                     Due
                   </th>
                   <th className="text-left p-2 font-semibold text-[var(--text-mute)]">
@@ -297,14 +297,14 @@ export default function AdminView({
                   },
                 ].map((item, i) => (
                   <tr key={i} className="border-b border-[var(--border)]">
-                    <td className="p-2 font-semibold text-sm">{item.customer}</td>
-                    <td className="p-2">{item.amount}</td>
-                    <td className="p-2 text-xs text-[var(--text-mute)]">
+                    <td className="p-2 font-semibold text-xs sm:text-sm">{item.customer}</td>
+                    <td className="p-2 text-xs sm:text-sm">{item.amount}</td>
+                    <td className="p-2 text-xs text-[var(--text-mute)] hidden sm:table-cell">
                       {item.due}
                     </td>
                     <td className="p-2">
                       <span
-                        className={`px-2 py-1 rounded text-xs font-bold inline-block ${
+                        className={`px-2 py-1 rounded text-xs font-bold inline-block whitespace-nowrap ${
                           item.color === "green"
                             ? "bg-green-100 text-green-800"
                             : item.color === "yellow"
@@ -323,12 +323,12 @@ export default function AdminView({
         </div>
 
         {/* HR */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-          <h3 className="text-lg font-bold mb-2">HR</h3>
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold mb-2">HR</h3>
           <p className="text-xs text-[var(--text-mute)] mb-4">
             Ad hoc installers get the same record as permanent staff
           </p>
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {[
               {
                 tag: "ONBOARDING",
@@ -357,7 +357,7 @@ export default function AdminView({
             ].map((item, i) => (
               <div
                 key={i}
-                className={`p-4 rounded-lg border-l-4 ${
+                className={`p-2 sm:p-4 rounded-lg border-l-4 ${
                   item.color === "green"
                     ? "border-l-green-500 bg-green-50"
                     : item.color === "yellow"
@@ -365,19 +365,19 @@ export default function AdminView({
                     : "border-l-red-500 bg-red-50"
                 }`}
               >
-                <div className="flex items-start gap-3">
-                  <div className="text-2xl">{item.icon}</div>
-                  <div className="flex-1">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <div className="text-lg sm:text-2xl flex-shrink-0">{item.icon}</div>
+                  <div className="flex-1 min-w-0">
                     <div className="text-xs font-bold text-[var(--text-mute)] uppercase">
                       {item.tag}
                     </div>
-                    <div className="font-semibold text-sm mt-1">{item.title}</div>
+                    <div className="font-semibold text-xs sm:text-sm mt-1 line-clamp-2">{item.title}</div>
                     <div className="text-xs text-[var(--text-mute)] mt-1">
                       {item.person}
                     </div>
                   </div>
                   <span
-                    className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
+                    className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap flex-shrink-0 ${
                       item.color === "green"
                         ? "bg-green-100 text-green-800"
                         : item.color === "yellow"

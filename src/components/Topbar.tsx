@@ -22,11 +22,13 @@ export default function Topbar({
   currentPage,
   onLogout,
   onToast,
+  onMenuClick,
 }: {
   role: Role;
   currentPage: string;
   onLogout?: () => void;
   onToast?: (msg: string) => void;
+  onMenuClick?: () => void;
 }) {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -63,10 +65,28 @@ export default function Topbar({
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-[var(--border)] bg-[var(--card)]">
-      {/* Left: Breadcrumb */}
-      <div className="text-sm text-[var(--text-sub)] font-medium">
-        {CRUMB_OF[currentPage] || "Dashboard"}
+    <div className="flex items-center justify-between gap-4 px-4 sm:px-6 py-5 border-b border-[var(--border)] bg-[var(--card)]">
+      {/* Left: Hamburger + Breadcrumb */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden w-10 h-10 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--text-sub)] hover:bg-[var(--gray-100)] transition"
+        >
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div className="text-sm text-[var(--text-sub)] font-medium hidden sm:block">
+          {CRUMB_OF[currentPage] || "Dashboard"}
+        </div>
       </div>
 
       {/* Right: Search + Icons + User */}
@@ -131,7 +151,7 @@ export default function Topbar({
         <div className="relative">
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="flex items-center gap-2 bg-[var(--card)] border border-[var(--border)] rounded-2xl px-3 py-2 hover:bg-[var(--gray-100)] transition"
+            className="hidden sm:flex items-center gap-2 bg-[var(--card)] border border-[var(--border)] rounded-2xl px-3 py-2 hover:bg-[var(--gray-100)] transition"
           >
             <div
               className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
@@ -156,6 +176,15 @@ export default function Topbar({
             >
               <polyline points="6 9 12 15 18 9" />
             </svg>
+          </button>
+
+          {/* Mobile user icon */}
+          <button
+            onClick={() => setUserMenuOpen(!userMenuOpen)}
+            className="sm:hidden w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold"
+            style={{ backgroundColor: bgColor }}
+          >
+            {initials.slice(0, 2)}
           </button>
 
           {/* User Dropdown Menu */}

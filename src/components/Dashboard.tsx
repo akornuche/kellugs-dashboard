@@ -52,6 +52,7 @@ export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [showPassword, setShowPassword] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const savedRole = localStorage.getItem("kellugs_role");
@@ -108,9 +109,17 @@ export default function Dashboard() {
         onPageChange={setCurrentPage}
         role={role}
         onLogout={handleLogout}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
       <div className="flex-1 min-w-0 overflow-hidden">
-        <Topbar role={role} currentPage={currentPage} onLogout={handleLogout} onToast={showToast} />
+        <Topbar 
+          role={role} 
+          currentPage={currentPage} 
+          onLogout={handleLogout} 
+          onToast={showToast}
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        />
         <MainContent
           currentPage={currentPage}
           role={role}

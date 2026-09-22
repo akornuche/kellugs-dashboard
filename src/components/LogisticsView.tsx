@@ -46,25 +46,25 @@ export default function LogisticsView({
   };
 
   return (
-    <div className="max-w-7xl pb-20">
+    <div className="max-w-7xl pb-20 px-4 sm:px-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-6 mb-6 flex-wrap">
+      <div className="flex items-start justify-between gap-3 sm:gap-6 mb-6 flex-wrap">
         <div>
-          <h1 className="text-4xl font-bold mb-2">Logistics</h1>
-          <p className="text-[var(--text-mute)] text-sm">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Logistics</h1>
+          <p className="text-[var(--text-mute)] text-xs sm:text-sm">
             Scheduling, proof of delivery and vehicle records
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--bg)] text-sm font-medium transition"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--bg)] text-xs sm:text-sm font-medium transition"
           >
             Export <span>↗</span>
           </button>
           <button
             onClick={handleSchedule}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium transition whitespace-nowrap"
           >
             Schedule delivery <span>+</span>
           </button>
@@ -73,10 +73,10 @@ export default function LogisticsView({
 
       {/* Info Banners */}
       <div className="space-y-3 mb-6">
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
-          <div className="text-blue-600 font-bold text-xl">🔒</div>
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 sm:p-4 flex gap-2 sm:gap-3">
+          <div className="text-lg sm:text-xl flex-shrink-0">🔒</div>
           <div>
-            <div className="text-sm font-bold text-blue-900">
+            <div className="text-xs sm:text-sm font-bold text-blue-900">
               Read-only. Admin & Accounts Head has read access to this module.
             </div>
             <div className="text-xs text-blue-800">
@@ -85,10 +85,10 @@ export default function LogisticsView({
           </div>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
-          <div className="text-blue-600 font-bold text-xl">📋</div>
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 sm:p-4 flex gap-2 sm:gap-3">
+          <div className="text-lg sm:text-xl flex-shrink-0">📋</div>
           <div>
-            <div className="text-sm font-bold text-blue-900">
+            <div className="text-xs sm:text-sm font-bold text-blue-900">
               Deliveries shown here are{" "}
               <span className="underline">sample records</span> illustrating the
               Logistics guide&apos;s workflow.
@@ -106,7 +106,7 @@ export default function LogisticsView({
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
         {LOG.stats.map((stat: any, i: number) => (
           <div
             key={i}
@@ -137,13 +137,13 @@ export default function LogisticsView({
       </div>
 
       {/* Filters & Search */}
-      <div className="mb-6 flex gap-3 items-center flex-wrap">
-        <div className="flex gap-2">
+      <div className="mb-6 flex gap-2 sm:gap-3 items-center flex-wrap">
+        <div className="flex gap-1 sm:gap-2 flex-wrap">
           {statusOptions.map((status) => (
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+              className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition whitespace-nowrap ${
                 filterStatus === status
                   ? "bg-blue-600 text-white"
                   : "bg-[var(--card)] border border-[var(--border)] text-[var(--text-mute)] hover:bg-[var(--bg)]"
@@ -153,45 +153,45 @@ export default function LogisticsView({
             </button>
           ))}
         </div>
-        <div className="ml-auto flex-1 max-w-xs">
+        <div className="ml-auto flex-1 sm:flex-none min-w-0 sm:min-w-fit max-w-xs">
           <input
             type="text"
-            placeholder="Search order or destination"
+            placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-1 text-sm rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text)] placeholder-[var(--text-mute)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text)] placeholder-[var(--text-mute)] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Deliveries Table */}
-        <div className="col-span-2">
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <h3 className="text-lg font-bold mb-4">Deliveries</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+        <div className="sm:col-span-1 lg:col-span-2">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-bold mb-4">Deliveries</h3>
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <table className="w-full text-xs sm:text-sm">
                 <thead>
                   <tr className="border-b border-[var(--border)]">
-                    <th className="text-left p-3 font-semibold text-[var(--text-mute)]">
+                    <th className="text-left p-2 sm:p-3 font-semibold text-[var(--text-mute)]">
                       Order{" "}
                       <span className="text-xs font-normal">↕</span>
                     </th>
-                    <th className="text-left p-3 font-semibold text-[var(--text-mute)]">
+                    <th className="text-left p-2 sm:p-3 font-semibold text-[var(--text-mute)] hidden md:table-cell">
                       Dispatch <span className="text-xs font-normal">↕</span>
                     </th>
-                    <th className="text-left p-3 font-semibold text-[var(--text-mute)]">
+                    <th className="text-left p-2 sm:p-3 font-semibold text-[var(--text-mute)]">
                       Vehicle <span className="text-xs font-normal">↕</span>
                     </th>
-                    <th className="text-left p-3 font-semibold text-[var(--text-mute)]">
+                    <th className="text-left p-2 sm:p-3 font-semibold text-[var(--text-mute)]">
                       Status <span className="text-xs font-normal">↕</span>
                     </th>
-                    <th className="text-left p-3 font-semibold text-[var(--text-mute)]">
+                    <th className="text-left p-2 sm:p-3 font-semibold text-[var(--text-mute)] hidden lg:table-cell">
                       Proof of delivery{" "}
                       <span className="text-xs font-normal">↕</span>
                     </th>
-                    <th className="text-left p-3 font-semibold text-[var(--text-mute)]">
+                    <th className="text-left p-2 sm:p-3 font-semibold text-[var(--text-mute)] hidden sm:table-cell">
                       Fee <span className="text-xs font-normal">↕</span>
                     </th>
                   </tr>
@@ -199,17 +199,17 @@ export default function LogisticsView({
                 <tbody>
                   {filteredDeliveries.map((item, i) => (
                     <tr key={i} className="border-b border-[var(--border)] hover:bg-[var(--bg)] transition">
-                      <td className="p-3">
-                        <div className="font-semibold text-sm">{item[0]}</div>
+                      <td className="p-2 sm:p-3">
+                        <div className="font-semibold text-xs sm:text-sm">{item[0]}</div>
                         <div className="text-xs text-[var(--text-mute)]">
                           {item[1]}
                         </div>
                       </td>
-                      <td className="p-3 text-sm">{item[2]}</td>
-                      <td className="p-3 text-sm">{item[3]}</td>
-                      <td className="p-3">
+                      <td className="p-2 sm:p-3 text-xs sm:text-sm hidden md:table-cell">{item[2]}</td>
+                      <td className="p-2 sm:p-3 text-xs sm:text-sm">{item[3]}</td>
+                      <td className="p-2 sm:p-3">
                         <span
-                          className={`px-2 py-1 rounded text-xs font-bold inline-block ${
+                          className={`px-2 py-1 rounded text-xs font-bold inline-block whitespace-nowrap ${
                             item[5] === "Scheduled"
                               ? "bg-blue-100 text-blue-800"
                               : item[5] === "Dispatched"
@@ -224,7 +224,7 @@ export default function LogisticsView({
                           {item[5]}
                         </span>
                       </td>
-                      <td className="p-3">
+                      <td className="p-2 sm:p-3 hidden lg:table-cell">
                         <span
                           className={`px-2 py-1 rounded text-xs font-bold inline-block ${
                             item[7] === "Captured"
@@ -235,7 +235,7 @@ export default function LogisticsView({
                           {item[7] || "—"}
                         </span>
                       </td>
-                      <td className="p-3 text-sm">{item[8] || "—"}</td>
+                      <td className="p-2 sm:p-3 text-xs sm:text-sm hidden sm:table-cell">{item[8] || "—"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -248,10 +248,10 @@ export default function LogisticsView({
         </div>
 
         {/* Right Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Delivery-fee reference */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <h3 className="text-lg font-bold mb-3">Delivery-fee reference</h3>
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-bold mb-3">Delivery-fee reference</h3>
             <p className="text-xs text-[var(--text-mute)] mb-4">
               Drawn from Logistics&apos; own cost data. The diagnostics recorded lost
               sales where a fee was quoted late or guessed.
@@ -267,12 +267,12 @@ export default function LogisticsView({
                 { name: "Oyo", status: "", fee: "₦145,000" },
               ].map((item, i) => (
                 <div key={i} className="border-t border-[var(--border)] pt-2">
-                  <div className="font-semibold text-sm">{item.name}</div>
+                  <div className="font-semibold text-xs sm:text-sm">{item.name}</div>
                   <div className="text-xs text-[var(--text-mute)]">
                     {item.status || `1 run on record`}
                   </div>
                   {item.fee && (
-                    <div className="text-sm font-bold text-blue-600 mt-1">
+                    <div className="text-xs sm:text-sm font-bold text-blue-600 mt-1">
                       {item.fee}
                     </div>
                   )}
@@ -287,12 +287,12 @@ export default function LogisticsView({
           </div>
 
           {/* Vehicles */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <h3 className="text-lg font-bold mb-4">Vehicles</h3>
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-bold mb-4">Vehicles</h3>
             <p className="text-xs text-[var(--text-mute)] mb-4">
               Each van carries its own service record
             </p>
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {[
                 {
                   plate: "LAG-441-XA",
@@ -315,7 +315,7 @@ export default function LogisticsView({
               ].map((vehicle, i) => (
                 <div
                   key={i}
-                  className={`p-3 rounded-lg border-l-4 ${
+                  className={`p-2 sm:p-3 rounded-lg border-l-4 ${
                     vehicle.color === "green"
                       ? "border-l-green-500 bg-green-50"
                       : "border-l-yellow-500 bg-yellow-50"
@@ -329,7 +329,7 @@ export default function LogisticsView({
                           : "bg-yellow-500"
                       }`}
                     ></div>
-                    <div className="font-semibold text-sm">{vehicle.plate}</div>
+                    <div className="font-semibold text-xs sm:text-sm">{vehicle.plate}</div>
                   </div>
                   <div className="text-xs text-[var(--text-mute)] ml-4">
                     {vehicle.driver}

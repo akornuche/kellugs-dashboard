@@ -43,20 +43,20 @@ export default function DashboardView({
   return (
     <div className="pb-20">
       {/* Page Header */}
-      <div className="flex items-start justify-between gap-6 mb-6 flex-wrap px-6">
+      <div className="flex items-start justify-between gap-3 sm:gap-6 mb-6 flex-wrap px-4 sm:px-6">
         <div>
-          <h1 className="text-4xl font-bold mb-2">Company overview</h1>
-          <p className="text-[var(--text-mute)] text-sm">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Company overview</h1>
+          <p className="text-[var(--text-mute)] text-xs sm:text-sm">
             1 – 30 September 2026 · Ikeja & Lekki
           </p>
         </div>
-        <div className="flex gap-3">
-          <button className="px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--text)] font-medium hover:bg-[var(--gray-100)] transition">
+        <div className="flex gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
+          <button className="px-3 sm:px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--text)] text-sm font-medium hover:bg-[var(--gray-100)] transition">
             This month ▼
           </button>
           <button
             disabled={!canEdit}
-            className={`px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 ${
+            className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
               canEdit
                 ? "bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)]"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -78,16 +78,16 @@ export default function DashboardView({
       )}
 
       {/* Info Banners */}
-      <div className="mb-6 mx-6 space-y-3">
-        <div className="p-4 rounded-lg border border-blue-200 bg-blue-50 text-blue-900 text-sm flex gap-3">
-          <span>🔒</span>
+      <div className="mb-6 mx-4 sm:mx-6 space-y-3">
+        <div className="p-3 sm:p-4 rounded-lg border border-blue-200 bg-blue-50 text-blue-900 text-xs sm:text-sm flex gap-3">
+          <span className="flex-shrink-0">🔒</span>
           <span>
             <strong>Read-only.</strong> Admin & Accounts Head has read access to this module. Changes here belong to the CEO.
           </span>
         </div>
         
-        <div className="p-4 rounded-lg border border-blue-200 bg-blue-50 text-blue-900 text-sm flex gap-3">
-          <span>📖</span>
+        <div className="p-3 sm:p-4 rounded-lg border border-blue-200 bg-blue-50 text-blue-900 text-xs sm:text-sm flex gap-3">
+          <span className="flex-shrink-0">📖</span>
           <span>
             The <strong>96-product catalogue</strong> is read from kellughsc.com — real names, prices and stock flags. Stock levels and every operating record below are <strong>modelled</strong> from the 2026 coaching engagement so each module has something to show. What it real and what is not.
           </span>
@@ -95,7 +95,7 @@ export default function DashboardView({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-4 gap-4 mb-6 px-6">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6 px-4 sm:px-6">
         {DASH.stats.map((stat, i) => (
           <div
             key={i}
@@ -134,26 +134,26 @@ export default function DashboardView({
       </div>
 
       {/* Main 2-column layout */}
-      <div className="grid grid-cols-3 gap-6 px-6">
+      <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-6 px-4 sm:px-6">
         {/* Left: 2 columns - Main content */}
-        <div className="col-span-2 space-y-6">
+        <div className="sm:col-span-1 lg:col-span-2 space-y-6">
           {/* Revenue vs Target Chart */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <div className="flex justify-between items-start mb-4">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <div className="flex justify-between items-start mb-4 gap-2">
               <div>
-                <h3 className="text-lg font-bold mb-1">Revenue vs target</h3>
-                <p className="text-sm text-[var(--text-mute)]">
+                <h3 className="text-base sm:text-lg font-bold mb-1">Revenue vs target</h3>
+                <p className="text-xs sm:text-sm text-[var(--text-mute)]">
                   Trailing 12 months · ₦ millions · September is month-to-date
                 </p>
               </div>
-              <button className="text-[var(--text-mute)] hover:text-[var(--text)]">↗</button>
+              <button className="text-[var(--text-mute)] hover:text-[var(--text)] flex-shrink-0">↗</button>
             </div>
             
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={lineData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={lineData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} />
+                <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "var(--card)",
@@ -176,21 +176,21 @@ export default function DashboardView({
 
           {/* Department Scorecards */}
           <div>
-            <h3 className="text-lg font-bold mb-1">Department scorecards</h3>
-            <p className="text-sm text-[var(--text-mute)] mb-4">
+            <h3 className="text-base sm:text-lg font-bold mb-1">Department scorecards</h3>
+            <p className="text-xs sm:text-sm text-[var(--text-mute)] mb-4">
               Status is computed from one threshold rule applied to every metric — never set per department
             </p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
               {DASH.scorecards.map((scorecard, i) => (
                 <div
                   key={i}
-                  className="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4"
+                  className="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 sm:p-4"
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-bold text-sm">{scorecard.dept}</h4>
+                  <div className="flex justify-between items-start mb-2 gap-2">
+                    <h4 className="font-bold text-xs sm:text-sm">{scorecard.dept}</h4>
                     <span
-                      className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${
+                      className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0 ${
                         scorecard.color === "green"
                           ? "bg-green-100 text-green-700"
                           : scorecard.color === "amber"
@@ -232,38 +232,38 @@ export default function DashboardView({
           </div>
 
           {/* Improvement Tracker */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <div className="flex justify-between items-start mb-4">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <div className="flex justify-between items-start mb-4 gap-2 flex-wrap">
               <div>
-                <h3 className="text-lg font-bold mb-1">Improvement tracker</h3>
-                <p className="text-sm text-[var(--text-mute)]">
+                <h3 className="text-base sm:text-lg font-bold mb-1">Improvement tracker</h3>
+                <p className="text-xs sm:text-sm text-[var(--text-mute)]">
                   The one list the CEO edits directly — everything else on this page is a rollup
                 </p>
               </div>
               <button
                 onClick={() => onToast("New item form would open here")}
-                className="px-3 py-1 text-sm rounded border border-[var(--border)] hover:bg-[var(--gray-100)] transition whitespace-nowrap"
+                className="px-3 py-1 text-xs rounded border border-[var(--border)] hover:bg-[var(--gray-100)] transition whitespace-nowrap"
               >
                 Add item
               </button>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <table className="w-full text-xs sm:text-sm">
                 <thead>
                   <tr className="border-b border-[var(--border)]">
-                    <th className="text-left p-2 font-semibold text-[var(--text-mute)]">Item</th>
-                    <th className="text-left p-2 font-semibold text-[var(--text-mute)]">Owner</th>
-                    <th className="text-left p-2 font-semibold text-[var(--text-mute)]">Due</th>
-                    <th className="text-left p-2 font-semibold text-[var(--text-mute)]">Status</th>
+                    <th className="text-left p-2 font-semibold text-xs sm:text-sm text-[var(--text-mute)]">Item</th>
+                    <th className="text-left p-2 font-semibold text-xs sm:text-sm text-[var(--text-mute)] hidden sm:table-cell">Owner</th>
+                    <th className="text-left p-2 font-semibold text-xs sm:text-sm text-[var(--text-mute)]">Due</th>
+                    <th className="text-left p-2 font-semibold text-xs sm:text-sm text-[var(--text-mute)]">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {DASH.tracker.map((item, i) => (
                     <tr key={i} className="border-b border-[var(--border)] hover:bg-[var(--gray-100)]">
-                      <td className="p-2 font-medium text-sm">{item[0]}</td>
-                      <td className="p-2 text-sm">{item[1]}</td>
-                      <td className="p-2 text-sm">{item[2]}</td>
+                      <td className="p-2 font-medium text-xs sm:text-sm">{item[0]}</td>
+                      <td className="p-2 text-xs sm:text-sm hidden sm:table-cell">{item[1]}</td>
+                      <td className="p-2 text-xs sm:text-sm">{item[2]}</td>
                       <td className="p-2">
                         <span
                           className={`px-2 py-1 rounded text-xs font-bold inline-block ${
@@ -288,20 +288,20 @@ export default function DashboardView({
         {/* Right: 1 column - Sidebar */}
         <div className="space-y-6">
           {/* Readiness Index */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <h3 className="text-lg font-bold mb-1">Readiness index</h3>
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-bold mb-1">Readiness index</h3>
             <p className="text-xs text-[var(--text-mute)] mb-4">Tick marks the 70% target</p>
             
             {/* Donut Chart */}
             <div className="flex justify-center mb-4">
-              <ResponsiveContainer width={180} height={180}>
+              <ResponsiveContainer width={150} height={150}>
                 <PieChart>
                   <Pie
                     data={donutData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={55}
-                    outerRadius={85}
+                    innerRadius={45}
+                    outerRadius={70}
                     dataKey="value"
                     startAngle={90}
                     endAngle={450}
@@ -314,16 +314,16 @@ export default function DashboardView({
             </div>
 
             <div className="text-center mb-4">
-              <div className="text-4xl font-bold">49%</div>
+              <div className="text-3xl sm:text-4xl font-bold">49%</div>
               <div className="text-xs text-[var(--text-mute)]">of a 70% target</div>
             </div>
 
             {/* Mini Bars */}
-            <div className="flex gap-2">
+            <div className="flex gap-1 sm:gap-2">
               {readinessData.map((item, i) => (
                 <div key={i} className="flex-1 text-center">
                   <div
-                    className="h-12 bg-purple-300 rounded-t-sm mb-2 mx-0.5"
+                    className="h-10 sm:h-12 bg-purple-300 rounded-t-sm mb-1 sm:mb-2 mx-0.5"
                     style={{ backgroundColor: `rgba(108, 76, 245, ${0.3 + (item.v / 50) * 0.7})` }}
                   />
                   <div className="text-xs font-semibold">{item.l}</div>
@@ -333,10 +333,10 @@ export default function DashboardView({
           </div>
 
           {/* Decisions */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-bold">Decisions needed from you</h3>
-              <span className="bg-[var(--ink)] text-white text-xs font-bold px-2 py-1 rounded-full">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 gap-2">
+              <h3 className="text-base sm:text-lg font-bold">Decisions needed from you</h3>
+              <span className="bg-[var(--ink)] text-white text-xs font-bold px-2 py-1 rounded-full flex-shrink-0">
                 {DASH.decisions.length}
               </span>
             </div>
@@ -344,7 +344,7 @@ export default function DashboardView({
 
             <div className="space-y-3">
               {DASH.decisions.map((decision, i) => (
-                <div key={i} className="flex gap-3 pb-3 border-b border-[var(--border)] last:border-0">
+                <div key={i} className="flex gap-2 sm:gap-3 pb-3 border-b border-[var(--border)] last:border-0">
                   <div className="text-lg flex-shrink-0">📋</div>
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-xs line-clamp-2">{decision[0]}</div>
@@ -352,7 +352,7 @@ export default function DashboardView({
                   </div>
                   <button
                     onClick={() => onToast("Review panel would open")}
-                    className="px-2 py-1 text-xs rounded border border-[var(--border)] hover:bg-[var(--gray-100)] whitespace-nowrap transition"
+                    className="px-2 py-1 text-xs rounded border border-[var(--border)] hover:bg-[var(--gray-100)] whitespace-nowrap transition flex-shrink-0"
                   >
                     Review
                   </button>
@@ -362,9 +362,9 @@ export default function DashboardView({
           </div>
 
           {/* Alerts */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-bold">Alerts</h3>
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
+              <h3 className="text-base sm:text-lg font-bold">Alerts</h3>
               <button className="px-3 py-1 text-xs rounded border border-[var(--border)] hover:bg-[var(--gray-100)] transition">
                 All modules ▼
               </button>

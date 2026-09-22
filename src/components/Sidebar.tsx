@@ -36,16 +36,35 @@ export default function Sidebar({
   onPageChange,
   role,
   onLogout,
+  isOpen = true,
+  onClose,
 }: {
   currentPage: string;
   onPageChange: (page: string) => void;
   role: Role;
   onLogout: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const handleNavClick = (page: string) => {
+    onPageChange(page);
+    if (onClose) onClose();
+  };
+
   return (
-    <div className="w-[230px] bg-[var(--ink)] text-gray-200 flex flex-col h-screen sticky top-0 rounded-r-3xl m-4 p-6 transition-transform">
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 lg:hidden z-40"
+          onClick={onClose}
+        />
+      )}
+      <div className={`w-[230px] bg-[var(--ink)] text-gray-200 flex flex-col h-screen sticky top-0 rounded-r-3xl m-4 p-6 transition-transform lg:translate-x-0 ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      } fixed lg:static left-0 top-0 z-50 lg:z-auto lg:rounded-r-3xl lg:m-4 lg:sticky`}>
       {/* Brand */}
       <div className="flex items-center gap-2 mb-6 font-bold text-lg">
         <div
@@ -68,7 +87,7 @@ export default function Sidebar({
               {section.items.map((item) => (
                 <li key={item.id}>
                   <button
-                    onClick={() => onPageChange(item.id)}
+                    onClick={() => handleNavClick(item.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition ${
                       currentPage === item.id
                         ? "bg-gray-800 text-white"
@@ -123,7 +142,7 @@ export default function Sidebar({
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
