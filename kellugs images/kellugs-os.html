@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kellugs OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple:#6C4CF5;
+  --purple-dark:#5636D8;
+  --purple-light:#EDE9FE;
+  --ink:#111114;
+  --ink-soft:#26262b;
+  --gray-900:#18181b;
+  --gray-700:#52525b;
+  --gray-500:#8b8b93;
+  --gray-300:#e4e4e9;
+  --gray-100:#f2f2f5;
+  --white:#ffffff;
+  --green-bg:#dcfce7; --green-fg:#15803d; --green-dot:#22c55e;
+  --amber-bg:#fef3c7; --amber-fg:#b45309; --amber-dot:#f59e0b;
+  --red-bg:#fde4e4;   --red-fg:#dc2626;   --red-dot:#ef4444;
+  --pink-bg:#fce7f0;  --pink-fg:#db2777;  --pink-dot:#ec4899;
+  --blue-bg:#dbeafe;  --blue-fg:#2563eb;  --blue-dot:#3b82f6;
+  --gray-bg:#eceef1;  --gray-fg:#52525b;  --gray-dot:#9ca3af;
+  --bg:var(--gray-100);
+  --card:var(--white);
+  --border:var(--gray-300);
+  --text:var(--ink);
+  --text-sub:var(--gray-700);
+  --text-mute:var(--gray-500);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){
+    --bg:#0e0e11; --card:#1a1a1f; --border:#2b2b33; --text:#f2f2f5; --text-sub:#c9c9d2; --text-mute:#8b8b93; --gray-100:#141418; --purple-light:#241f3d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e0e11; --card:#1a1a1f; --border:#2b2b33; --text:#f2f2f5; --text-sub:#c9c9d2; --text-mute:#8b8b93; --gray-100:#141418; --purple-light:#241f3d;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Inter',ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+input{font-family:inherit;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:8px;}
+
+/* fixed left brand-edge gradient sliver */
+.edge-gradient{
+  position:fixed; left:0; top:0; bottom:0; width:14px;
+  background:linear-gradient(180deg,#8b6cf7 0%, #6C4CF5 25%, rgba(108,76,245,0) 75%);
+  z-index:0; pointer-events:none;
+}
+
+/* ---------- shell layout ---------- */
+.app{display:flex; min-height:100%; position:relative; z-index:1;}
+.sidebar{
+  width:230px; flex:0 0 230px; background:var(--ink); color:#e7e7ea;
+  margin:14px 0 14px 20px; border-radius:20px; padding:22px 16px;
+  display:flex; flex-direction:column; height:calc(100vh - 28px); position:sticky; top:14px;
+  transition:transform .25s ease;
+}
+.brand{display:flex; align-items:center; gap:10px; padding:2px 8px 22px 8px; font-weight:800; font-size:19px; color:#fff;}
+.brand .mark{width:26px;height:26px;border-radius:7px;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;}
+.nav-section-label{font-size:11px; letter-spacing:.02em; color:#7b7b84; padding:14px 10px 6px;}
+.nav-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px;}
+.nav-item{
+  display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:11px;
+  color:#b6b6bd; font-size:14.5px; font-weight:500; position:relative;
+}
+.nav-item svg{flex:0 0 auto;opacity:.85;}
+.nav-item .label{flex:1;}
+.nav-item .badge{
+  background:#2d2d34; color:#d6d6db; font-size:11.5px; font-weight:700; padding:1px 7px; border-radius:20px;
+}
+.nav-item .lock{opacity:.55;}
+.nav-item:hover{background:#1e1e23; color:#e7e7ea;}
+.nav-item.active{background:#232329; color:#fff; font-weight:700;}
+.nav-item.active .badge{background:var(--purple); color:#fff;}
+.nav-divider{height:1px; background:#28282e; margin:14px 4px;}
+.sidebar-footer{margin-top:auto; padding:12px 8px 2px; border-top:1px solid #26262c;}
+.sidebar-footer .loc{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#dcdce0;margin-bottom:3px;}
+.sidebar-footer .phase{font-size:12px;color:#7b7b84;}
+
+.main{flex:1; min-width:0; padding:22px 26px 60px;}
+.topbar{display:flex; align-items:center; gap:14px; margin-bottom:22px;}
+.crumb{font-size:15px; color:var(--text-sub); font-weight:500; white-space:nowrap;}
+.search{
+  flex:1; max-width:460px; display:flex; align-items:center; gap:8px;
+  background:var(--card); border:1px solid var(--border); border-radius:12px; padding:9px 12px; color:var(--text-mute); font-size:14px;
+}
+.search input{border:none;background:transparent;outline:none;flex:1;color:var(--text);font-size:14px;}
+.search kbd{background:var(--gray-100); border-radius:5px; font-size:11px; padding:2px 6px; color:var(--text-mute); font-weight:600;}
+.top-icon-btn{
+  width:38px;height:38px;border-radius:50%;background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;position:relative;color:var(--text-sub);
+}
+.top-icon-btn .dot{position:absolute; top:7px; right:8px; width:8px;height:8px;border-radius:50%;background:var(--red-dot); border:2px solid var(--card);}
+.user-chip{
+  display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:6px 12px 6px 6px; cursor:pointer; position:relative; flex:0 0 auto;
+}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12.5px;flex:0 0 auto;}
+.user-chip .name{font-size:13.5px; font-weight:700; line-height:1.2;}
+.user-chip .role{font-size:11.5px; color:var(--text-mute); line-height:1.2;}
+.chev{color:var(--text-mute); margin-left:2px;}
+.dropdown{
+  position:absolute; top:calc(100% + 8px); right:0; width:240px; background:var(--card);
+  border:1px solid var(--border); border-radius:14px; box-shadow:0 16px 40px rgba(0,0,0,.16); padding:10px;
+  display:none; z-index:40;
+}
+.dropdown.open{display:block;}
+.dropdown .who{padding:8px 8px 12px; border-bottom:1px solid var(--border); margin-bottom:6px;}
+.dropdown .who .n{font-weight:700;font-size:14px;}
+.dropdown .who .r{font-size:12px;color:var(--text-mute);}
+.dropdown-item{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:9px;font-size:14px;color:var(--text);}
+.dropdown-item:hover{background:var(--gray-100);}
+.dropdown-item .tag{margin-left:auto;font-size:11.5px;color:var(--text-mute);}
+.dropdown-item.danger{color:#dc2626;}
+.bell-panel{position:absolute; top:calc(100% + 8px); right:0; width:290px; background:var(--card); border:1px solid var(--border); border-radius:14px; box-shadow:0 16px 40px rgba(0,0,0,.16); padding:12px; display:none; z-index:40;}
+.bell-panel.open{display:block;}
+.bell-panel h4{margin:2px 4px 8px;font-size:13px;}
+.bell-item{padding:8px 4px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-sub);}
+.bell-item:last-child{border-bottom:none;}
+.bell-item b{color:var(--text);}
+
+/* page head */
+.page-head{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:18px; flex-wrap:wrap;}
+.page-head h1{font-size:32px; margin:0 0 6px; font-weight:800; letter-spacing:-.01em;}
+.page-head .sub{color:var(--text-mute); font-size:14.5px;}
+.head-actions{display:flex; gap:10px; align-items:center;}
+.btn{border-radius:11px; padding:10px 16px; font-size:14px; font-weight:600; border:1px solid transparent; display:inline-flex; align-items:center; gap:8px; white-space:nowrap;}
+.btn-outline{background:var(--card); border-color:var(--border); color:var(--text);}
+.btn-outline:hover{background:var(--gray-100);}
+.btn-dark{background:var(--ink); color:#fff;}
+.btn-dark:hover{background:var(--ink-soft);}
+.btn-dark:disabled{background:var(--gray-500); cursor:default;}
+.dd-btn{background:var(--card); border:1px solid var(--border); border-radius:11px; padding:10px 14px; font-size:14px; font-weight:600; display:flex; align-items:center; gap:8px; position:relative;}
+
+/* banners */
+.banner{display:flex; gap:10px; align-items:flex-start; border-radius:13px; padding:13px 16px; font-size:13.8px; margin-bottom:14px; border:1px solid var(--border); background:var(--card); color:var(--text-sub);}
+.banner b{color:var(--text);}
+.banner.info{border-color:#c9beff; background:var(--purple-light); color:#3f2f8f;}
+.banner.info b{color:#2f2270;}
+.banner a{color:var(--purple); font-weight:600; text-decoration:underline;}
+.banner svg{flex:0 0 auto; margin-top:2px;}
+
+/* cards */
+.grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:18px;}
+.grid2{display:grid; grid-template-columns:2fr 1fr; gap:16px; align-items:start;}
+.card{background:var(--card); border:1px solid var(--border); border-radius:18px; padding:20px;}
+.stat{display:flex; gap:14px; align-items:flex-start;}
+.stat .ic{width:38px;height:38px;border-radius:11px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--text-sub);}
+.stat .lbl{font-size:13.5px; color:var(--text-mute); margin-bottom:6px;}
+.stat .val{font-size:24px; font-weight:800; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.stat .sub{font-size:12.5px; color:var(--text-mute); margin-top:4px;}
+.chip{font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:20px;}
+.chip.green{background:var(--green-bg); color:var(--green-fg);}
+.chip.amber{background:var(--amber-bg); color:var(--amber-fg);}
+.chip.red{background:var(--red-bg); color:var(--red-fg);}
+.chip.pink{background:var(--pink-bg); color:var(--pink-fg);}
+.chip.blue{background:var(--blue-bg); color:var(--blue-fg);}
+.chip.gray{background:var(--gray-bg); color:var(--gray-fg);}
+
+.section-title{font-size:19px; font-weight:800; margin:0 0 4px;}
+.section-sub{font-size:13px; color:var(--text-mute); margin:0 0 16px;}
+
+/* bar chart */
+.bars{display:flex; align-items:flex-end; gap:22px; height:210px; margin-top:6px;}
+.bar-col{flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end; gap:8px;}
+.bar-val{font-size:13px; font-weight:700; color:var(--text-sub);}
+.bar-track{width:100%; max-width:64px; background:var(--gray-100); border-radius:8px 8px 4px 4px; flex:1; display:flex; align-items:flex-end;}
+.bar-fill{width:100%; border-radius:8px 8px 4px 4px; background:linear-gradient(180deg,#8b6cf7,var(--purple));}
+.bar-label{font-size:12.5px; color:var(--text-mute); margin-top:2px;}
+
+/* line chart */
+.linechart-wrap{margin-top:10px;}
+.linechart-axis{display:flex;justify-content:space-between;font-size:12px;color:var(--text-mute);margin-top:8px;}
+
+/* donut */
+.donut-wrap{display:flex; flex-direction:column; align-items:center; margin:8px 0 18px;}
+.donut{width:180px;height:180px;border-radius:50%; display:flex;align-items:center;justify-content:center; position:relative;}
+.donut .hole{width:132px;height:132px;border-radius:50%;background:var(--card); display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.donut .hole .pct{font-size:28px; font-weight:800;}
+.donut .hole .of{font-size:11.5px; color:var(--text-mute); text-align:center; max-width:110px;}
+
+/* mini bars */
+.minibars{display:flex; align-items:flex-end; gap:10px; height:90px; margin-top:14px;}
+.mb-col{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end;}
+.mb-val{font-size:11.5px; font-weight:700; color:var(--text-mute);}
+.mb-fill{width:100%; border-radius:6px 6px 3px 3px; background:var(--gray-300);}
+.mb-fill.last{background:linear-gradient(180deg,#8b6cf7,var(--purple));}
+.mb-label{font-size:11px; color:var(--text-mute);}
+
+/* scorecards */
+.grid2x2{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;}
+.score-card .top{display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;}
+.score-card .owner{font-size:12.5px; color:var(--text-mute); margin-bottom:12px;}
+.metric-row{margin-bottom:10px;}
+.metric-row .mr-top{display:flex; justify-content:space-between; font-size:13.5px; margin-bottom:5px;}
+.mr-track{height:6px; border-radius:6px; background:var(--gray-100); overflow:hidden;}
+.mr-fill{height:100%; border-radius:6px;}
+.mr-fill.green{background:#16a34a;} .mr-fill.amber{background:#f59e0b;} .mr-fill.red{background:#ef4444;}
+
+/* tables */
+.table-wrap{overflow-x:auto;}
+table{width:100%; border-collapse:collapse; font-size:13.8px;}
+thead th{text-align:left; font-weight:600; color:var(--text-mute); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--border); white-space:nowrap;}
+tbody td{padding:13px 10px; border-bottom:1px solid var(--border); vertical-align:top;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr.flag{background:rgba(239,68,68,.06);}
+.cell-main{font-weight:700;}
+.cell-sub{font-size:12px; color:var(--text-mute); margin-top:2px; font-weight:400;}
+.strike{text-decoration:line-through; text-decoration-color:var(--text-mute);}
+.dotline{display:inline-flex;align-items:center;gap:6px;}
+.dotline::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+/* filter chips */
+.chipbar{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; align-items:center;}
+.fchip{padding:8px 14px; border-radius:20px; font-size:13.5px; font-weight:600; background:var(--gray-100); color:var(--text-sub); border:1px solid transparent;}
+.fchip.active{background:var(--ink); color:#fff;}
+.tbl-search{margin-left:auto; display:flex; align-items:center; gap:8px; background:var(--gray-100); border-radius:11px; padding:8px 12px; font-size:13.5px; color:var(--text-mute); min-width:220px;}
+.tbl-search input{background:transparent; border:none; outline:none; flex:1; color:var(--text); font-size:13.5px;}
+
+/* list rows (facilities, hr, alerts, receivables-side etc) */
+.list-row{display:flex; gap:12px; padding:12px 2px; border-bottom:1px solid var(--border);}
+.list-row:last-child{border-bottom:none;}
+.list-ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.list-body{flex:1; min-width:0;}
+.list-tag{font-size:11px; font-weight:800; letter-spacing:.02em; color:var(--purple);}
+.list-title{font-size:14px; font-weight:600; margin-top:2px;}
+.list-sub{font-size:12.5px; color:var(--text-mute); margin-top:3px;}
+.list-status{display:flex; align-items:center; gap:8px; margin-top:2px;}
+
+.kv-row{display:flex; justify-content:space-between; align-items:flex-start; padding:12px 2px; border-bottom:1px solid var(--border); font-size:13.8px;}
+.kv-row:last-child{border-bottom:none;}
+.kv-row .k{font-weight:600;}
+.kv-row .k-sub{font-size:12px;color:var(--text-mute); margin-top:2px; font-weight:400;}
+.kv-row .v{font-weight:700; text-align:right;}
+
+.pagination{display:flex; align-items:center; justify-content:space-between; margin-top:14px; font-size:13px; color:var(--text-mute);}
+.pg-btns{display:flex; gap:6px;}
+.pg-btn{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--gray-100); font-weight:600; font-size:13px; color:var(--text-sub);}
+.pg-btn.active{background:var(--ink); color:#fff;}
+
+.footnote{font-size:12.5px; color:var(--text-mute); margin-top:12px;}
+.footnote.center{text-align:center;}
+
+/* login / index page */
+.index-wrap{max-width:1180px; margin:0 auto; padding:40px 26px 70px;}
+.hero{background:var(--ink); border-radius:24px; padding:44px; display:flex; gap:40px; align-items:center; color:#fff; margin-bottom:34px; flex-wrap:wrap;}
+.hero-left{flex:1; min-width:280px;}
+.eyebrow{font-size:12.5px; font-weight:700; letter-spacing:.03em; color:#a78bfa; margin-bottom:14px;}
+.hero h1{font-size:40px; font-weight:800; line-height:1.12; margin:0 0 16px; letter-spacing:-0.01em;}
+.hero p{color:#c6c6cf; font-size:15.5px; max-width:480px; margin:0 0 26px;}
+.hero-stats{display:flex; gap:34px; padding-top:22px; border-top:1px solid #2c2c33;}
+.hero-stats div b{font-size:24px; display:block; font-weight:800;}
+.hero-stats div span{font-size:12.5px; color:#9c9ca6;}
+.hero-right{flex:0 0 300px; background:#fff; border-radius:16px; padding:16px; color:#111;}
+.door-illustration{border-radius:10px; overflow:hidden; background:linear-gradient(160deg,#3a2b6b,#1c1730);}
+.door-caption{padding-top:12px; font-size:12.5px; color:#4b4b55;}
+.door-caption b{color:#111; font-size:13.5px; display:block; margin-bottom:2px;}
+
+.index-lower{display:grid; grid-template-columns:1fr 1.55fr; gap:24px; align-items:start;}
+.login-card{background:var(--card); border:1px solid var(--border); border-radius:20px; padding:30px;}
+.login-brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;margin-bottom:20px;}
+.login-brand .mark{width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;}
+.login-brand .os{color:var(--purple);}
+.login-card h2{font-size:24px; margin:0 0 8px; font-weight:800;}
+.login-card p{color:var(--text-mute); font-size:13.8px; margin:0 0 22px; line-height:1.5;}
+.field{margin-bottom:16px;}
+.field label{display:block; font-size:13px; font-weight:600; margin-bottom:6px;}
+.field .inputwrap{position:relative;}
+.field input{width:100%; padding:11px 13px; border-radius:11px; border:1px solid var(--border); background:var(--gray-100); font-size:14px; color:var(--text); outline:none;}
+.field input:focus{border-color:var(--purple); background:var(--card);}
+.showtoggle{position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:12.5px; font-weight:700; color:var(--purple); background:none; border:none;}
+.remember{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--text-sub); margin-bottom:20px;}
+.signin-btn{width:100%; background:var(--ink); color:#fff; border:none; border-radius:13px; padding:13px; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;}
+.signin-btn:hover{background:var(--ink-soft);}
+.proto-note{display:flex; gap:9px; margin-top:18px; font-size:12px; color:var(--text-mute); line-height:1.5; background:var(--gray-100); border-radius:11px; padding:12px;}
+.proto-note code{background:var(--gray-300); padding:1px 5px; border-radius:5px; font-size:11.5px;}
+.proto-note svg{flex:0 0 auto; margin-top:1px;}
+
+.roles-head{margin-bottom:14px;}
+.roles-head h3{font-size:19px; margin:0 0 4px; font-weight:800;}
+.roles-head p{font-size:13.5px; color:var(--text-mute); margin:0;}
+.roles-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.role-card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; display:flex; gap:12px; align-items:flex-start; text-align:left;}
+.role-card:hover{border-color:var(--purple);}
+.role-av{width:38px;height:38px;border-radius:50%;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.role-body{flex:1; min-width:0;}
+.role-name-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.role-name-row .rn{font-weight:700; font-size:14.5px;}
+.role-tr-badge{font-size:10.5px; font-weight:800; color:var(--purple); background:var(--purple-light); padding:2px 7px; border-radius:20px;}
+.role-person{font-size:12px; color:var(--text-mute); margin-top:1px;}
+.role-blurb{font-size:13px; color:var(--text-sub); margin-top:8px; line-height:1.45;}
+.role-tags{margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+.rtag{font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px;}
+.rtag.writes{background:var(--purple-light); color:var(--purple-dark);}
+.rtag.reads{background:var(--gray-bg); color:var(--gray-fg);}
+.roles-footnote{font-size:12.5px; color:var(--text-mute); margin-top:16px;}
+.roles-footnote code{background:var(--gray-300); padding:1px 6px; border-radius:5px;}
+
+/* toast */
+#toast{position:fixed; bottom:22px; right:22px; background:var(--ink); color:#fff; padding:12px 18px; border-radius:12px; font-size:13.8px; font-weight:600; box-shadow:0 14px 34px rgba(0,0,0,.25); opacity:0; transform:translateY(12px); transition:all .25s ease; z-index:100; max-width:300px;}
+#toast.show{opacity:1; transform:translateY(0);}
+
+/* mobile */
+.hamburger{display:none;}
+@media (max-width:920px){
+  .grid4{grid-template-columns:1fr 1fr;}
+  .grid2{grid-template-columns:1fr;}
+  .grid2x2{grid-template-columns:1fr;}
+  .index-lower{grid-template-columns:1fr;}
+  .roles-grid{grid-template-columns:1fr;}
+  .hamburger{display:flex; width:38px;height:38px;border-radius:11px;background:var(--card);border:1px solid var(--border);align-items:center;justify-content:center;flex:0 0 auto;}
+  .sidebar{position:fixed; left:0; top:0; bottom:0; height:100%; margin:0; border-radius:0; z-index:60; transform:translateX(-110%); width:250px;}
+  .sidebar.open{transform:translateX(0);}
+  .main{padding:16px 14px 50px;}
+  .search{display:none;}
+  .hero{padding:26px;}
+  .hero h1{font-size:30px;}
+}
+@media (max-width:600px){
+  .grid4{grid-template-columns:1fr 1fr;}
+  .page-head h1{font-size:26px;}
+}
+</style>
+</head>
+<body>
+<div class="edge-gradient"></div>
+<div id="root"></div>
+<div id="toast"></div>
+
+<script>
+/* ============================= DATA ============================= */
+const ICONS = {
+  grid:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>',
+  trend:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6"/><polyline points="14 6 21 6 21 13"/></svg>',
+  box:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.3L12 12l8.7-4.7"/><path d="M12 22V12"/></svg>',
+  truck:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 9h4l3 3v5h-7z"/><circle cx="6" cy="19" r="1.8"/><circle cx="17.5" cy="19" r="1.8"/></svg>',
+  card:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>',
+  lock:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  search:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+  help:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 4.8 2.4c-.9.7-1.9 1.2-1.9 2.6"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  bell:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+  chev:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+  chevR:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>',
+  book:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M19 15H6a2 2 0 0 0-2 2"/></svg>',
+  export:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M7 9l5 5 5-5"/><path d="M4 21h16"/></svg>',
+  check:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"/></svg>',
+  plus:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  shield:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/></svg>',
+  users:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  gear:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  calendar:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  logout:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+  info:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  alert:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  cube:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.3 7 12 12 20.7 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>',
+  clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  naira:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="4" x2="6" y2="20"/><line x1="18" y1="4" x2="18" y2="20"/><line x1="4" y1="9" x2="20" y2="15"/><line x1="4" y1="15" x2="20" y2="9"/><line x1="2" y1="4" x2="2" y2="20"/><line x1="22" y1="4" x2="22" y2="20"/></svg>'
+};
+
+const ROLES = [
+ {id:'ceo', initials:'KU', color:'#6C4CF5', name:'Kelechi Ugwu', title:'Chief Executive Officer', reports:'reports to —', blurb:'Direction, delegation and the decisions queue', writes:['dashboard'], readsAll:true, tag:null},
+ {id:'gm', initials:'CO', color:'#3B82F6', name:'Chidera Obi', title:'General Manager', reports:'reports to CEO', blurb:'Coordination across the four departments', writes:['dashboard'], readsAll:true, tag:'TRANSITION 2'},
+ {id:'ops', initials:'IN', color:'#14B8A6', name:'Ifeanyi Nwosu', title:'Operations Manager', reports:'reports to CEO', blurb:'Everything between a confirmed order and a delivered, quality-checked job', writes:['inventory','logistics'], writeLabel:'Inventory', extraWrite:'+3 read-only', readsAll:false, tag:null},
+ {id:'sales', initials:'AB', color:'#F59E0B', name:'Amaka Bello', title:'Sales Head', reports:'reports to CEO', blurb:'Field, Digital, Institutional and Showroom sales units', writes:['sales'], writeLabel:'Sales', extraWrite:'+4 read-only', readsAll:false, tag:null},
+ {id:'cs', initials:'NE', color:'#EC4899', name:'Ngozi Eze', title:'Customer Service Head', reports:'reports to CEO', blurb:'Everything that happens after a sale closes', writes:[], writeLabel:'Support', extraWrite:'+4 read-only', readsAll:false, tag:null},
+ {id:'admin', initials:'TS', color:'#7C3AED', name:'Tunde Salami', title:'Admin & Accounts Head', reports:'reports to CEO', blurb:'Accounts, HR administration, facilities and compliance', writes:['admin'], writeLabel:'Admin', extraWrite:'+4 read-only', readsAll:false, tag:null},
+ {id:'log', initials:'EO', color:'#6366F1', name:'Emeka Okonkwo', title:'Logistics & Delivery Lead', reports:'reports to Operations Manager', blurb:'Scheduling, proof of delivery and vehicle upkeep', writes:['logistics'], writeLabel:'Logistics', extraWrite:'+2 read-only', readsAll:false, tag:null},
+ {id:'qc', initials:'BA', color:'#F97316', name:'Bola Adeyinka', title:'Site Officer & QC', reports:'reports to Operations Manager', blurb:'Client-site measurement and the sign-off before cutting', writes:[], writeLabel:'Production', extraWrite:'', readsAll:false, tag:null},
+];
+
+const NAV = [
+  {section:'Overview', items:[
+    {id:'dashboard', label:'Dashboard', icon:'grid'},
+    {id:'sales', label:'Sales', icon:'trend'},
+  ]},
+  {section:'Operations', items:[
+    {id:'inventory', label:'Inventory', icon:'box', badge:28},
+    {id:'logistics', label:'Logistics', icon:'truck'},
+  ]},
+  {section:'Company', items:[
+    {id:'admin', label:'Admin', icon:'card'},
+  ]}
+];
+const OWNER_OF = {dashboard:'the CEO', sales:'the Sales Head', inventory:'the Operations Manager', logistics:'the Logistics & Delivery Lead', admin:'the Admin & Accounts Head'};
+const CRUMB_OF = {dashboard:'Dashboard', sales:'Sales', inventory:'Operations / Inventory', logistics:'Operations / Logistics', admin:'Admin'};
+
+/* ============================= STATE ============================= */
+const State = {
+  role: ROLES[5], // default Tunde Salami / Admin & Accounts Head
+  loggedIn: false,
+  showPassword:false,
+  invSearch:'', invPage:1, invFilter:'all',
+  salesSearch:'', salesFilter:'all',
+  logSearch:'', logFilter:'all',
+};
+
+function safeGet(k){ try{ const v = localStorage.getItem(k); return v; }catch(e){ return null; } }
+function safeSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+
+(function restore(){
+  const r = safeGet('kellugs_role');
+  const li = safeGet('kellugs_loggedin');
+  if(r){ const found = ROLES.find(x=>x.id===r); if(found) State.role = found; }
+  if(li==='1') State.loggedIn = true;
+})();
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function currency(n){ return n; }
+
+/* ============================= SAMPLE DATA ============================= */
+const DASH = {
+  stats:[
+    {ic:'shield', lbl:'Readiness index', val:'49%', chip:{t:'+5',c:'green'}, sub:'Target 70% in 12 months'},
+    {ic:'naira', lbl:'Revenue MTD', val:'₦18.4m', chip:{t:'92%',c:'blue'}, sub:'of a ₦20m target'},
+    {ic:'users', lbl:'Delegation', val:'38%', chip:{t:'-37',c:'pink'}, sub:'Closed without you · target 75%'},
+    {ic:'check', lbl:'Improvements', val:'62%', chip:{t:'+12',c:'blue'}, sub:'4 of 8 items closed'},
+  ],
+  line: {points:[13.2,14.1,19.5,17.8,12.0,15.8,16.5,15.9,16.8,17.4,17.1,18.4], months:['Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26','Sep 26'], min:11.3, max:22.5, target:20.0},
+  readinessBars:[{l:'Q3 25',v:31},{l:'Q4 25',v:35},{l:'Q1 26',v:40},{l:'Q2 26',v:44},{l:'Q3 26',v:49}],
+  scorecards:[
+    {dept:'Sales', owner:'Amaka Bello', status:'On track', color:'green', metrics:[
+      {l:'Revenue vs target', v:'92%', pct:92, c:'green'}, {l:'Lead-to-close', v:'27%', pct:27, c:'green'}, {l:'New customers', v:'11', pct:70, c:'green'}]},
+    {dept:'Operations', owner:'Ifeanyi Nwosu', status:'Needs attention', color:'red', metrics:[
+      {l:'Output vs plan', v:'88%', pct:88, c:'amber'}, {l:'Rework rate', v:'6.2%', pct:60, c:'red'}, {l:'On-time delivery', v:'94%', pct:94, c:'green'}]},
+    {dept:'Admin', owner:'Tunde Salami', status:'Watch', color:'amber', metrics:[
+      {l:'Reconciliation', v:'100%', pct:100, c:'green'}, {l:'Compliance closed', v:'80%', pct:80, c:'amber'}, {l:'Receivables ageing', v:'13d', pct:35, c:'green'}]},
+    {dept:'Support', owner:'Ngozi Eze', status:'Needs attention', color:'red', metrics:[
+      {l:'Satisfaction', v:'84%', pct:84, c:'green'}, {l:'Within SLA', v:'43%', pct:43, c:'red'}, {l:'Avg resolution', v:'3.4d', pct:60, c:'red'}]},
+  ],
+  tracker:[
+    ['Publish the measurement sign-off gate to both branches','Ifeanyi Nwosu','2026-09-30','In progress','amber'],
+    ['Confirm reorder thresholds with Operations','Ifeanyi Nwosu','2026-08-31','Complete','green'],
+    ['One documented damaged-goods policy, applied to all','Ngozi Eze','2026-08-15','Complete','green'],
+    ['Day-4 follow-up call on every delivery','Ngozi Eze','2026-10-15','In progress','amber'],
+    ['Out-of-state delivery fee table from Logistics costs','Amaka Bello','2026-10-31','Not started','red'],
+    ['Single lead record across Field, Digital, Showroom','Amaka Bello','2026-07-31','Complete','green'],
+    ['General Manager role definition for Transition 2','Kelechi Ugwu','2026-12-31','Not started','red'],
+    ['Complaint logged same day, every channel','Ngozi Eze','2026-07-15','Complete','green'],
+  ],
+  decisions:[
+    ['Approve bulk import order — Turkish armoured doors','Sales · Amaka Bello · ₦8.4m'],
+    ['Sign off credit policy exception — Ade & Sons Ltd','Admin · Tunde Salami · ₦640k'],
+    ['Approve clearance pricing — slow-moving stock','Inventory · Ifeanyi Nwosu · ₦9.78m'],
+    ['Approve emergency CNC spare part purchase','Production · Ifeanyi Nwosu · ₦340k'],
+    ['Approve full refund — Mr. Balogun damaged delivery','Support · Ngozi Eze · ₦300k'],
+    ['Approve 10% discount — Ade & Sons, 6-unit order','Sales · Amaka Bello · ₦270k'],
+  ],
+  alerts:[
+    ['INVENTORY','4FT 4 Chrome Steel Door is out of stock','Imported — 60 day lead time, escalate to CEO','cube'],
+    ['INVENTORY','3FT Glossy Door is out of stock','Imported — 45 day lead time, escalate to CEO','cube'],
+    ['INVENTORY','3FT German Design Steel Door is out of stock','Imported — 40 day lead time, escalate to CEO','cube'],
+    ['INVENTORY','4FT Copper Steel Door is out of stock','Imported — 40 day lead time, escalate to CEO','cube'],
+    ['PRODUCTION','CNC router down 3 days','Spindle bearing — spare part on order','gear'],
+    ['SUPPORT','Mr. Balogun — Damaged door on delivery','64h against a 48h target','alert'],
+  ]
+};
+
+const SALES = {
+  stats:[
+    {ic:'naira', lbl:'Revenue MTD', val:'₦18.4m', chip:{t:'92%',c:'blue'}, sub:'of a ₦20m target'},
+    {ic:'trend', lbl:'Open pipeline', val:'₦30.7m', sub:'8 leads not yet won or lost'},
+    {ic:'gear', lbl:'Lead-to-close', val:'27%', chip:{t:'-3 pts',c:'pink'}, sub:'11 won of 41 raised · target 30%'},
+    {ic:'naira', lbl:'Cost per lead', val:'₦54.7k', sub:'₦820k marketing spend this period'},
+  ],
+  pipeline:[{l:'New (2)',v:10.5},{l:'Quoted (3)',v:11.2},{l:'Negotiation (3)',v:9.1}],
+  lost:[
+    ['SHOWROOM','Mrs. Adebayo','Delivery fee quoted late · ₦900k · Mirror glass door'],
+    ['INSTITUTIONAL','Sunrise Schools','Price — no follow-up call · ₦3.06m · Flush doors x18'],
+  ],
+  channels:[
+    ['Instagram','₦30k','6 leads · ₦180k spent'],
+    ['Showroom & signage','₦60k','4 leads · ₦240k spent'],
+    ['Referral scheme','₦30k','3 leads · ₦90k spent'],
+    ['Field / site reps','₦155k','2 leads · ₦310k spent'],
+  ],
+  leads:[
+    ['Renaissance Homes','Security doors x12','Institutional','Ikeja','₦9.6m','New','blue','Amaka Bello','2026-09-05'],
+    ['Bakehouse Ltd','4FT security door','Digital','Lekki','₦850k','New','blue','Amaka Bello','2026-09-02'],
+    ['Mr. Danjuma','4FT double wooden door','Referral','Ikeja','₦1.2m','Negotiation','amber','Amaka Bello','2026-09-01'],
+    ['Grandis Estate','Wardrobes, custom','Showroom','Lekki','₦1.1m','Negotiation','amber','Amaka Bello','2026-08-30'],
+    ['Ade & Sons Ltd','3FT Turkish doors x6','Referral','Ikeja','₦2.7m','Quoted','amber','Amaka Bello','2026-08-28'],
+    ['Adeyemi Residence','3 openings, measured on site','Field','Ikeja','₦1.45m','Won','green','Ifeanyi Nwosu','2026-08-24'],
+    ['Mrs. Okafor','Internal doors x4','Referral','Ikeja','₦620k','Won','green','Amaka Bello','2026-08-19'],
+    ['Lekki Gardens Phase 2','Internal doors x40','Institutional','Lekki','₦6.8m','Negotiation','amber','Amaka Bello','2026-08-14'],
+    ['Mr. Balogun','Emperor wooden door x2','Digital','Lekki','₦320k','Won','green','Amaka Bello','2026-08-11'],
+    ['Chukwu Properties','Kitchen cabinets, 3 units','Institutional','Ikeja','₦4.2m','Quoted','amber','Amaka Bello','2026-08-09'],
+    ['Mrs. Adebayo','Mirror glass door','Showroom','Lekki','₦900k','Lost','red','Amaka Bello','2026-08-06'],
+    ['Hilltop Contractors','HDF doors x25','Field','Ikeja','₦4.25m','Quoted','amber','Amaka Bello','2026-08-04'],
+  ]
+};
+
+const INV = {
+  stats:[
+    {ic:'naira', lbl:'Stock at cost', val:'₦93.1m', sub:'4.7 months of cover at a ₦20m month'},
+    {ic:'alert', lbl:'At or below reorder', val:'28', chip:{t:'9 imported',c:'pink'}, sub:'Imported items escalate to the CEO'},
+    {ic:'clock', lbl:'Untouched 90+ days', val:'9', sub:'₦7.41m of capital asleep on the shelf'},
+    {ic:'box', lbl:'Out of stock', val:'8', sub:'Still listed for sale on the site'},
+  ],
+  classes:[{l:'Imported',v:25.2},{l:'Finished',v:45.6},{l:'Fitting',v:13.2},{l:'Raw',v:8.2},{l:'Consumable',v:0.9}],
+  exposure:[['Imported SKUs','27'],['Below reorder','9'],['Longest lead time','60 days'],['Capital held','₦25.2m'],['China','3 SKUs'],['Germany','4 SKUs'],['Israel','7 SKUs'],['Origin not stated','6 SKUs'],['Turkey','7 SKUs']],
+  reorder:[
+    ['IMPORTED','4FT 4 Chrome Steel Door [1200mm by 2100mm]','Out of stock · Guangzhou Yidu — China · 60 day lead time · escalates to the CEO'],
+    ['IMPORTED','3FT Glossy Door [900mm by 2100mm]','Out of stock · Anadolu Kapı — Turkey · 45 day lead time · escalates to the CEO'],
+    ['IMPORTED','3FT German Design Steel Door [900mm by 2100mm]','Out of stock · Hörmann Trade — Germany · 40 day lead time · escalates to the CEO'],
+    ['IMPORTED','4FT Copper Steel Door [1200mm by 2100mm]','Out of stock · Hörmann Trade — Germany · 40 day lead time · escalates to the CEO'],
+    ['FINISHED GOOD','Glass wooden door','Out of stock · Kellugs Workshop — Ikeja · 7 day lead time'],
+    ['FINISHED GOOD','Laminant 1 Mtr','Out of stock · Kellugs Workshop — Ikeja · 7 day lead time'],
+    ['FINISHED GOOD','Round Glass Design Door','Out of stock · Kellugs Workshop — Ikeja · 7 day lead time'],
+    ['FINISHED GOOD','Turkish wooden glass door','Out of stock · Kellugs Workshop — Ikeja · 7 day lead time'],
+  ],
+  table:[
+    ['2 Panel Solid Wooden Door','KH-0048 · Internal Doors','Finished good',17,6,'20d','7d','24d','₦1.78m','OK','green'],
+    ['3FT Black Glass Extra High Door [900mm by 2400mm]','KH-0101 · Security Doors','Imported',3,2,'68d','45d','51d','₦1.4m','OK','green'],
+    ['3FT Brown and Black Steel Door','KH-0250 · 3FT Doors','Finished good',1,3,'2d','7d','10d','₦186k','Below reorder','amber'],
+    ['3FT Brown Isreali Door [900mm by 2100mm]','KH-0099 · Internal Doors','Imported',5,5,'50d','50d','44d','₦550k','Below reorder','amber'],
+    ['3FT Brown Isreali Door [900mmx2100mm]','KH-0082 · Internal Doors','Imported',9,3,'150d','50d','63d','₦1.88m','OK','green'],
+    ['3FT Brown with 8 Chromes Door','KH-0175 · Security Doors','Imported',5,2,'113d','45d','42d','₦2.06m','OK','green'],
+    ['3FT by 7FT Black Steel Door (Brown & Black)','KH-0263 · 3FT Doors','Finished good',12,5,'17d','7d','74d','₦744k','OK','green'],
+    ['3FT Extra High Isreali Door with Laminant [900mm by 2400mm]','KH-0102 · Security Doors','Imported',5,2,'125d','50d','102d','₦1.79m','Slow moving','blue'],
+    ['3FT Extra High Wooden Door [900mm by 2400mm]','KH-0202 · Security Doors','Finished good',9,3,'21d','7d','57d','₦2.79m','OK','green'],
+    ['3FT German Design Door [900mmx2100mm]','KH-0087 · Security Doors','Imported',7,3,'93d','40d','150d','₦1.04m','Slow moving','blue'],
+    ['3FT German Design Steel Door [900mm by 2100mm]','KH-0093 · Security Doors','Imported',0,2,'0d','40d','28d','₦0','Out of stock','red'],
+    ['3FT Glossy Door [900mm by 2100mm]','KH-0179 · Security Doors','Imported',0,3,'0d','45d','63d','₦0','Out of stock','red'],
+    ['3FT Gold and Gray Steel Door','KH-0261 · 3FT Doors','Finished good',8,3,'19d','7d','13d','₦1.49m','OK','green'],
+    ['3FT Grey Embossed Handle Door','KH-0247 · 3FT Doors','Finished good',4,2,'14d','7d','50d','₦744k','OK','green'],
+  ],
+  table2:[
+    ['4FT China Steel Door [1200mm by 2100mm]','KH-0301 · Security Doors','Imported',1,3,'60d','60d','9d','₦412k','Below reorder','amber'],
+    ['4FT Copper Steel Door [1200mm by 2100mm]','KH-0090 · Security Doors','Imported',0,2,'0d','40d','40d','₦0','Out of stock','red'],
+    ['4FT Single 8 Chromes Side Glass Door','KH-0031 · Security Doors','Imported',6,2,'80d','60d','35d','₦7.5m','OK','green'],
+    ['5FT Round Top Wooden Door','KH-0311 · Internal Doors','Finished good',11,4,'12d','7d','19d','₦990k','OK','green'],
+    ['Copper Handle Wardrobe Door','KH-0322 · Fitting','Fitting',22,10,'8d','7d','5d','₦640k','OK','green'],
+    ['Emperor Wooden Door','KH-0140 · Internal Doors','Finished good',3,3,'32d','7d','88d','₦1.02m','Below reorder','amber'],
+    ['Flush Door 32mm','KH-0206 · Internal Doors','Raw',14,6,'22d','7d','12d','₦520k','OK','green'],
+    ['Laminant Sheet 8x4','KH-0410 · Consumable','Consumable',30,15,'5d','3d','2d','₦210k','OK','green'],
+    ['Round Handle Set — Chrome','KH-0455 · Fitting','Fitting',18,8,'9d','7d','6d','₦96k','OK','green'],
+    ['Turkish Wooden Glass Door','KH-0288 · Security Doors','Finished good',0,3,'0d','7d','15d','₦0','Out of stock','red'],
+    ['Waste Wood Offcuts','KH-0500 · Raw','Raw',40,10,'3d','2d','1d','₦40k','OK','green'],
+    ['Wardrobe Sliding Track 2.4m','KH-0335 · Fitting','Fitting',9,5,'11d','7d','9d','₦270k','OK','green'],
+    ['White PVC Laminant Door','KH-0270 · Internal Doors','Finished good',6,4,'18d','7d','22d','₦880k','OK','green'],
+    ['Wood Glue 20L Drum','KH-0480 · Consumable','Consumable',12,6,'14d','7d','8d','₦150k','OK','green'],
+  ]
+};
+
+const LOG = {
+  stats:[
+    {ic:'check', lbl:'On-time delivery', val:'94%', chip:{t:'-1',c:'pink'}, sub:'Target 95%'},
+    {ic:'truck', lbl:'In transit & scheduled', val:'3', sub:'1 running late'},
+    {ic:'shield', lbl:'Proof of delivery', val:'100%', sub:'Captured on delivered orders'},
+    {ic:'naira', lbl:'Out-of-state fees', val:'₦243k', sub:'Sales quotes from this, not guesswork'},
+  ],
+  fees:[['Lagos — Ikeja & Lekki','own vans, no separate fee','Included'],['Ogun','1 run on record','₦98,000'],['Oyo','1 run on record','₦145,000']],
+  vehicles:[['LAG-441-XA','Sunday A. · 3 runs this period','truck'],['LAG-207-KJ','Emeka O. · 2 runs this period','truck'],['Hired 3-ton','Contract · 2 runs this period · 1 delayed','truck']],
+  deliveries:[
+    ['Adeyemi Residence — 3 openings','DLV-454 · Magodo, Lagos','2026-09-13','LAG-207-KJ','Emeka O.','Scheduled','blue','Awaiting handover','—','notyet'],
+    ['Chukwu Properties — cabinets x3','DLV-455 · Ibadan, Oyo','2026-09-08','Hired 3-ton','Contract','Dispatched','blue','Awaiting handover','₦145k','notyet'],
+    ['Ozumba Residence — sink & fittings','DLV-456 · Victoria Island, Lagos','2026-09-07','LAG-441-XA','Sunday A.','Delivered','green','Captured','—','delivered'],
+    ['Bakehouse Ltd — security door','DLV-452 · Lekki, Lagos','2026-09-06','LAG-441-XA','Sunday A.','Scheduled','blue','Awaiting handover','—','notyet'],
+    ['Mrs. Okafor — internal doors x4','DLV-451 · Ikeja, Lagos','2026-09-04','LAG-441-XA','Sunday A.','Delivered','green','Captured','—','delivered'],
+    ['Mr. Balogun — Emperor doors x2','DLV-453 · Ajah, Lagos','2026-09-02','LAG-207-KJ','Emeka O.','Delivered','green','Captured, damage noted at handover','—','delivered'],
+    ['Sunrise Schools — sample doors','DLV-450 · Abeokuta, Ogun','2026-08-29','Hired 3-ton','Contract, vehicle breakdown en route','Delayed','red','Awaiting handover','₦98k','delayed'],
+  ]
+};
+
+const ADMIN = {
+  stats:[
+    {ic:'check', lbl:'Reconciliation', val:'Up to date', sub:'Last run 2026-09-09'},
+    {ic:'naira', lbl:'Outstanding receivables', val:'₦1.4m', chip:{t:'2 overdue',c:'pink'}, sub:'across 4 customers'},
+    {ic:'shield', lbl:'Compliance closed', val:'4/5', sub:'Fire, CCTV, first-aid, exit signage'},
+    {ic:'users', lbl:'Open HR items', val:'2', sub:'Hiring, onboarding and staff records'},
+  ],
+  expenses:[{l:'Marketing',v:820},{l:'Import duty',v:620},{l:'Vehicle',v:310},{l:'Rework',v:240},{l:'Utilities',v:180},{l:'Security',v:95}],
+  receivables:[
+    ['Chukwu Properties','₦210k','2026-08-28','13 days overdue','red', true],
+    ['Lekki Gardens Phase 2','₦420k','2026-09-03','7 days overdue','amber', false],
+    ['Ade & Sons Ltd','₦640k','2026-09-14','Within terms','green', false, 'Credit policy exception pending'],
+    ['Hilltop Contractors','₦130k','2026-09-20','Within terms','green', false],
+  ],
+  facilities:[
+    ['LEKKI','Fire alarm servicing — Lekki branch','Overdue','red','Due 2026-09-12'],
+    ['IKEJA','CCTV coverage — workshop yard','Closed','green','Due 2026-08-30'],
+    ['IKEJA','First-aid stock replenishment','Closed','green','Due 2026-08-22'],
+    ['LEKKI','Fire extinguisher recertification','Closed','green','Due 2026-08-18'],
+    ['IKEJA','Emergency exit signage','Closed','green','Due 2026-07-30'],
+  ],
+  hr:[
+    ['ONBOARDING','New hire onboarding — Sales Head','In progress','amber','Tunde Salami'],
+    ['RECORDS','Installer engagement records — 4 ad hoc staff','Open','red','Tunde Salami'],
+    ['REVIEW','Staff attendance review — August','Complete','green','Tunde Salami'],
+  ]
+};
+
+/* ============================= HELPERS ============================= */
+function chip(c){ return c ? `<span class="chip ${c.c}">${c.t}</span>` : ''; }
+function pill(label,color){ return `<span class="chip ${color}"><span class="dotline">${label}</span></span>`; }
+
+function statCard(s){
+  return `<div class="card stat">
+    <div class="ic">${ICONS[s.ic]}</div>
+    <div style="flex:1;min-width:0;">
+      <div class="lbl">${s.lbl}</div>
+      <div class="val">${s.val} ${chip(s.chip)}</div>
+      <div class="sub">${s.sub||''}</div>
+    </div>
+  </div>`;
+}
+
+function barChart(data,maxOverride){
+  const max = maxOverride || Math.max(...data.map(d=>d.v));
+  return `<div class="bars">${data.map(d=>{
+    const h = Math.max(6, Math.round((d.v/max)*100));
+    return `<div class="bar-col"><div class="bar-val">${typeof d.v==='number' && d.v<1000 && d.v>0 && !d.raw ? '' : ''}${d.disp||d.v}</div>
+      <div class="bar-track"><div class="bar-fill" style="height:${h}%"></div></div>
+      <div class="bar-label">${d.l}</div></div>`;
+  }).join('')}</div>`;
+}
+
+function lineChart(cfg){
+  const w=760,h=210,pad=6;
+  const {points,min,max,target,months}=cfg;
+  const range = max-min;
+  const stepX = (w-pad*2)/(points.length-1);
+  const y = v => h - pad - ((v-min)/range)*(h-pad*2);
+  const pts = points.map((v,i)=>[pad+i*stepX, y(v)]);
+  const pathD = pts.map((p,i)=> (i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  const areaD = pathD + ` L${pts[pts.length-1][0].toFixed(1)},${h} L${pts[0][0].toFixed(1)},${h} Z`;
+  const ty = y(target);
+  const lastPt = pts[pts.length-1];
+  return `<div class="linechart-wrap">
+    <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="none" style="overflow:visible">
+      <defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#6C4CF5" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#6C4CF5" stop-opacity="0"/>
+      </linearGradient></defs>
+      <line x1="0" y1="${ty.toFixed(1)}" x2="${w}" y2="${ty.toFixed(1)}" stroke="#e11d8a" stroke-width="1.5" stroke-dasharray="5 5"/>
+      <path d="${areaD}" fill="url(#lg1)"/>
+      <path d="${pathD}" fill="none" stroke="#6C4CF5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${lastPt[0].toFixed(1)}" cy="${lastPt[1].toFixed(1)}" r="5" fill="#fff" stroke="#6C4CF5" stroke-width="3"/>
+      <text x="${w-4}" y="${ty-8}" text-anchor="end" font-size="12" fill="#db2777" font-weight="700">Target ₦${target.toFixed(1)}m</text>
+    </svg>
+    <div class="linechart-axis">${months.map(m=>`<span>${m}</span>`).join('')}</div>
+  </div>`;
+}
+
+function donut(pct,label){
+  const deg = Math.round((pct/100)*360);
+  return `<div class="donut-wrap">
+    <div class="donut" style="background:conic-gradient(var(--purple) 0deg ${deg}deg, var(--gray-100) ${deg}deg 360deg)">
+      <div class="hole"><div class="pct">${pct}%</div><div class="of">${label}</div></div>
+    </div>
+  </div>`;
+}
+
+function miniBars(data){
+  const max = Math.max(...data.map(d=>d.v));
+  return `<div class="minibars">${data.map((d,i)=>{
+    const h = Math.max(10, Math.round((d.v/max)*100));
+    const isLast = i===data.length-1;
+    return `<div class="mb-col"><div class="mb-val">${d.v}%</div><div class="mb-fill ${isLast?'last':''}" style="height:${h}%"></div><div class="mb-label">${d.l}</div></div>`;
+  }).join('')}</div>`;
+}
+
+function metricRow(m){
+  return `<div class="metric-row"><div class="mr-top"><span>${m.l}</span><b>${m.v}</b></div><div class="mr-track"><div class="mr-fill ${m.c}" style="width:${Math.min(100,m.pct)}%"></div></div></div>`;
+}
+
+function scoreCard(s){
+  return `<div class="card score-card">
+    <div class="top"><h3 style="margin:0;font-size:17px;font-weight:800;">${s.dept}</h3>${pill(s.status,s.color)}</div>
+    <div class="owner">${s.owner}</div>
+    ${s.metrics.map(metricRow).join('')}
+  </div>`;
+}
+
+function trackerRow(r){
+  return `<tr><td class="cell-main" style="font-weight:500;">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${pill(r[3],r[4])}</td></tr>`;
+}
+
+function listRow(tag,title,sub,icon,statusHtml){
+  return `<div class="list-row">
+    <div class="list-ic" style="background:var(--purple-light);color:var(--purple-dark);">${ICONS[icon]||ICONS.info}</div>
+    <div class="list-body">
+      <div class="list-tag">${tag}</div>
+      <div class="list-title">${title}</div>
+      <div class="list-sub">${sub}</div>
+    </div>
+  </div>`;
+}
+
+/* ============================= PAGE RENDERERS ============================= */
+function renderDashboard(){
+  const canEdit = State.role.writes.includes('dashboard');
+  return `
+  <div class="page-head">
+    <div><h1>Company overview</h1><div class="sub">1 – 30 September 2026 · Ikeja &amp; Lekki</div></div>
+    <div class="head-actions">
+      <button class="dd-btn" id="periodDD">This month ${ICONS.chev}</button>
+      <button class="btn ${canEdit?'btn-dark':'btn-outline'}" id="closePeriodBtn" ${canEdit?'':'disabled'}>${canEdit?'':''}Close period ${ICONS.check}</button>
+    </div>
+  </div>
+  ${!canEdit?`<div class="banner"><span>${ICONS.lock}</span><span><b>Read-only.</b> ${State.role.title} has read access to this module. Changes here belong to ${OWNER_OF.dashboard}.</span></div>`:''}
+  <div class="banner info"><span>${ICONS.book}</span><span>The <b>96-product catalogue</b> is read from kellughsc.com — real names, prices and stock flags. Stock levels and every operating record below are <b>modelled</b> from the 2026 coaching engagement so each module has something to show. <a href="#" onclick="return false;">What is real and what is not</a></span></div>
+  <div class="grid4">${DASH.stats.map(statCard).join('')}</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="section-title">Revenue vs target</div>
+      <div class="section-sub">Trailing 12 months · ₦ millions · September is month-to-date</div>
+      ${lineChart(DASH.line)}
+    </div>
+    <div class="card">
+      <div class="section-title">Readiness index</div>
+      <div class="section-sub">Tick marks the 70% target</div>
+      ${donut(49,'of a 70% target')}
+      ${miniBars(DASH.readinessBars)}
+    </div>
+  </div>
+  <div style="height:18px"></div>
+  <div class="grid2">
+    <div>
+      <div class="section-title" style="margin-bottom:2px;">Department scorecards</div>
+      <div class="section-sub">Status is computed from one threshold rule applied to every metric — never set per department</div>
+      <div class="grid2x2">${DASH.scorecards.map(scoreCard).join('')}</div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div><div class="section-title" style="margin-bottom:2px;">Improvement tracker</div><div class="section-sub">The one list the CEO edits directly — everything else on this page is a rollup</div></div>
+          <button class="btn btn-outline" style="padding:7px 12px;font-size:13px;" onclick="toast('New item form would open here')">${ICONS.plus} Add item</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Item</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
+        <tbody>${DASH.tracker.map(trackerRow).join('')}</tbody></table></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="section-title" style="margin-bottom:2px;">Decisions needed from you</div>
+          <span class="chip gray" style="background:var(--ink);color:#fff;">${DASH.decisions.length}</span>
+        </div>
+        <div class="section-sub">Cleared only by CEO action</div>
+        ${DASH.decisions.map(d=>`<div class="list-row" style="align-items:center;">
+          <div class="list-ic" style="background:var(--purple-light);color:var(--purple-dark);">${ICONS.users}</div>
+          <div class="list-body"><div class="list-title" style="font-weight:600;">${d[0]}</div><div class="list-sub">${d[1]}</div></div>
+          <button class="btn btn-outline" style="padding:6px 12px;font-size:12.5px;" onclick="toast('Review panel would open')">Review</button>
+        </div>`).join('')}
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="section-title" style="margin-bottom:2px;">Alerts</div>
+          <span class="dd-btn" style="padding:5px 10px;font-size:12.5px;">All modules ${ICONS.chev}</span>
+        </div>
+        <div class="section-sub">Assembled from the modules, not typed by hand</div>
+        ${DASH.alerts.map(a=>listRow(a[0],a[1],a[2],a[3])).join('')}
+        <div class="footnote">Show 6 more</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSales(){
+  const canEdit = State.role.writes.includes('sales');
+  const stages = ['all','New','Quoted','Negotiation','Won','Lost'];
+  const filtered = SALES.leads.filter(l=>{
+    const stageOk = State.salesFilter==='all' || l[5]===State.salesFilter;
+    const q = State.salesSearch.trim().toLowerCase();
+    const searchOk = !q || l[0].toLowerCase().includes(q) || l[2].toLowerCase().includes(q);
+    return stageOk && searchOk;
+  });
+  return `
+  <div class="page-head">
+    <div><h1>Sales</h1><div class="sub">Field, Digital, Institutional and Showroom — one lead record</div></div>
+    <div class="head-actions">
+      <button class="btn btn-outline" onclick="toast('Preparing export…')">${ICONS.export} Export</button>
+      <button class="btn ${canEdit?'btn-dark':'btn-outline'}" ${canEdit?'':'disabled'} onclick="toast('Period closed')">Close period ${ICONS.check}</button>
+    </div>
+  </div>
+  ${!canEdit?`<div class="banner"><span>${ICONS.lock}</span><span><b>Read-only.</b> ${State.role.title} has read access to this module. Changes here belong to ${OWNER_OF.sales}.</span></div>`:''}
+  <div class="banner info"><span>${ICONS.book}</span><span>Leads here are <b>sample records</b>. The point they make is not: the four sales units share one lead record, so an enquiry is followed up once rather than lost between them. <a href="#" onclick="return false;">More on this</a></span></div>
+  <div class="grid4">${SALES.stats.map(statCard).join('')}</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="section-title">Pipeline by stage</div>
+      <div class="section-sub">Value of open leads at each stage, ₦ millions</div>
+      ${barChart(SALES.pipeline.map(p=>({l:p.l,v:p.v,disp:'₦'+p.v+'m'})))}
+    </div>
+    <div class="card">
+      <div class="section-title">Channels</div>
+      <div class="section-sub">Spend against leads generated</div>
+      ${SALES.channels.map(c=>`<div class="kv-row"><div><div class="k">${c[0]}</div><div class="k-sub">${c[2]}</div></div><div class="v">${c[1]}</div></div>`).join('')}
+      <div class="footnote">Cost per lead, by channel. Field reps cost the most per lead but bring the largest orders — which is why the pipeline value sits beside the count.</div>
+    </div>
+  </div>
+  <div style="height:18px"></div>
+  <div class="card" style="margin-bottom:18px;">
+    <div class="section-title">Why leads were lost</div>
+    <div class="section-sub">The reason is a required field — anecdote becomes a pattern you can act on</div>
+    ${SALES.lost.map(l=>listRow(l[0],l[1],l[2],'alert')).join('')}
+    <div class="footnote">1 of these 2 traces to the delivery fee being quoted late or guessed — the gap Logistics' fee reference is there to close.</div>
+  </div>
+  <div class="card">
+    <div class="chipbar">
+      ${stages.map(s=>`<button class="fchip ${State.salesFilter===s?'active':''}" onclick="State.salesFilter='${s}';rerender();">${s==='all'?'All':s}</button>`).join('')}
+      <div class="tbl-search">${ICONS.search}<input placeholder="Search customer, source or interest" value="${State.salesSearch}" oninput="State.salesSearch=this.value;rerenderKeepFocus(this)"></div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Source</th><th>Value</th><th>Stage</th><th>Owner</th><th>Raised</th></tr></thead>
+    <tbody>${filtered.map(l=>`<tr class="${l[5]==='Lost'?'flag':''}"><td><div class="cell-main">${l[0]}</div><div class="cell-sub">${l[1]}</div></td><td>${l[2]}<div class="cell-sub">${l[3]}</div></td><td>${l[4]}</td><td>${pill(l[5],l[6])}${l[5]==='Lost'?'<div class="cell-sub">Delivery fee quoted late</div>':''}</td><td>${l[7]}</td><td>${l[8]}</td></tr>`).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--text-mute);padding:26px;">No leads match this filter.</td></tr>`}</tbody></table></div>
+    <div class="footnote">Showing ${filtered.length} of ${SALES.leads.length} leads</div>
+  </div>`;
+}
+
+function invRows(){
+  const all = State.invPage===2 ? INV.table2 : INV.table;
+  return all.filter(r=>{
+    const q = State.invSearch.trim().toLowerCase();
+    const searchOk = !q || r[0].toLowerCase().includes(q) || r[1].toLowerCase().includes(q);
+    let filterOk = true;
+    if(State.invFilter==='reorder') filterOk = r[10]==='amber';
+    else if(State.invFilter==='oos') filterOk = r[10]==='red';
+    else if(State.invFilter==='idle') filterOk = parseInt(r[7])>=90;
+    else if(State.invFilter==='imported') filterOk = r[2]==='Imported';
+    else if(State.invFilter==='workshop') filterOk = r[2]!=='Imported';
+    return searchOk && filterOk;
+  });
+}
+
+function renderInventory(){
+  const canEdit = State.role.writes.includes('inventory');
+  const rows = invRows();
+  const filters = [['all','All'],['reorder','Below reorder'],['oos','Out of stock'],['idle','90+ days idle'],['imported','Imported'],['workshop','Workshop']];
+  return `
+  <div class="page-head">
+    <div><h1>Inventory</h1><div class="sub">96 catalogue products &amp; 10 workshop materials · Ikeja &amp; Lekki</div></div>
+    <div class="head-actions">
+      <button class="btn btn-outline" onclick="toast('Preparing export…')">${ICONS.export} Export</button>
+      <button class="btn ${canEdit?'btn-dark':'btn-outline'}" ${canEdit?'':'disabled'} onclick="toast('Movement form would open here')">${ICONS.plus} Record movement</button>
+    </div>
+  </div>
+  ${!canEdit?`<div class="banner"><span>${ICONS.lock}</span><span><b>Read-only.</b> ${State.role.title} has read access to this module. Changes here belong to ${OWNER_OF.inventory}.</span></div>`:''}
+  <div class="banner info"><span>${ICONS.book}</span><span>Product names, prices and in/out-of-stock flags are <b>real</b>, read from kellughsc.com. Quantity on hand, reorder point, supplier and lead time are <b>modelled</b> — the public storefront does not publish them. <a href="#" onclick="return false;">More on this</a></span></div>
+  <div class="grid4">${INV.stats.map(statCard).join('')}</div>
+  <div class="grid2">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div><div class="section-title" style="margin-bottom:2px;">Reorder alerts</div><div class="section-sub">Auto-raised when quantity on hand falls to the reorder point — sorted by how far under, then by lead time</div></div>
+        <button class="dd-btn" style="padding:7px 12px;font-size:13px;" onclick="toast('Class filter would apply here')">All classes ${ICONS.chev}</button>
+      </div>
+      ${INV.reorder.map(r=>listRow(r[0],r[1],r[2],'cube')).join('')}
+      <div class="footnote center">18 more in the table below.</div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">Stock by class</div>
+        <div class="section-sub">Value at cost, ₦ millions</div>
+        ${barChart(INV.classes.map(c=>({l:c.l,v:c.v,disp:'₦'+c.v+'m'})))}
+      </div>
+      <div class="card">
+        <div class="section-title">Import exposure</div>
+        <div class="section-sub">A local shortfall can be worked around with overtime. An imported one cannot.</div>
+        ${INV.exposure.map(e=>`<div class="kv-row"><div class="k">${e[0]}</div><div class="v">${e[1]}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div style="height:18px"></div>
+  <div class="card">
+    <div class="chipbar">
+      ${filters.map(f=>`<button class="fchip ${State.invFilter===f[0]?'active':''}" onclick="State.invFilter='${f[0]}';State.invPage=1;rerender();">${f[1]}</button>`).join('')}
+      <div class="tbl-search">${ICONS.search}<input placeholder="Search item, SKU or supplier" value="${State.invSearch}" oninput="State.invSearch=this.value;rerenderKeepFocus(this)"></div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Item</th><th>Class</th><th>On hand</th><th>Reorder at</th><th>Cover</th><th>Lead</th><th>Idle</th><th>Value</th><th>Status</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr class="${r[10]==='amber'?'flag':''}"><td><div class="cell-main">${r[0]}</div><div class="cell-sub">${r[1]}</div></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[8]}</td><td>${pill(r[9],r[10])}</td></tr>`).join('') || `<tr><td colspan="9" style="text-align:center;color:var(--text-mute);padding:26px;">No items match this filter.</td></tr>`}</tbody></table></div>
+    <div class="pagination">
+      <div>Showing ${rows.length?1:0}-${rows.length} of 106 items</div>
+      <div class="pg-btns">
+        <button class="pg-btn" onclick="if(State.invPage>1){State.invPage--;rerender();}">‹</button>
+        <button class="pg-btn ${State.invPage===1?'active':''}" onclick="State.invPage=1;rerender();">1</button>
+        <button class="pg-btn ${State.invPage===2?'active':''}" onclick="State.invPage=2;rerender();">2</button>
+        <button class="pg-btn" onclick="toast('Demo data covers pages 1–2')">…</button>
+        <button class="pg-btn" onclick="toast('Demo data covers pages 1–2')">8</button>
+        <button class="pg-btn" onclick="if(State.invPage<2){State.invPage++;rerender();}else{toast('Demo data covers pages 1–2')}">›</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderLogistics(){
+  const canEdit = State.role.writes.includes('logistics');
+  const filters = [['all','All'],['notyet','Not yet delivered'],['delayed','Delayed'],['outofstate','Out of state']];
+  const rows = LOG.deliveries.filter(d=>{
+    const q = State.logSearch.trim().toLowerCase();
+    const searchOk = !q || d[0].toLowerCase().includes(q) || d[1].toLowerCase().includes(q);
+    let fOk = true;
+    if(State.logFilter==='notyet') fOk = d[9]==='notyet';
+    else if(State.logFilter==='delayed') fOk = d[9]==='delayed';
+    else if(State.logFilter==='outofstate') fOk = /Oyo|Ogun|Abeokuta|Ibadan/.test(d[1]);
+    return searchOk && fOk;
+  });
+  return `
+  <div class="page-head">
+    <div><h1>Logistics</h1><div class="sub">Scheduling, proof of delivery and vehicle records</div></div>
+    <div class="head-actions">
+      <button class="btn btn-outline" onclick="toast('Preparing export…')">${ICONS.export} Export</button>
+      <button class="btn ${canEdit?'btn-dark':'btn-outline'}" ${canEdit?'':'disabled'} onclick="toast('Delivery scheduling form would open here')">${ICONS.plus} Schedule delivery</button>
+    </div>
+  </div>
+  ${!canEdit?`<div class="banner"><span>${ICONS.lock}</span><span><b>Read-only.</b> ${State.role.title} has read access to this module. Changes here belong to ${OWNER_OF.logistics}.</span></div>`:''}
+  <div class="banner info"><span>${ICONS.book}</span><span>Deliveries shown here are <b>sample records</b> illustrating the workflow: a delivery note travels with every job, and proof of delivery is captured at handover so damage is noted on the spot rather than argued about later. <a href="#" onclick="return false;">More on this</a></span></div>
+  <div class="grid4">${LOG.stats.map(statCard).join('')}</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="chipbar">
+        ${filters.map(f=>`<button class="fchip ${State.logFilter===f[0]?'active':''}" onclick="State.logFilter='${f[0]}';rerender();">${f[1]}</button>`).join('')}
+        <div class="tbl-search">${ICONS.search}<input placeholder="Search order or destination" value="${State.logSearch}" oninput="State.logSearch=this.value;rerenderKeepFocus(this)"></div>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Order</th><th>Dispatch</th><th>Vehicle</th><th>Status</th><th>Proof of delivery</th><th>Fee</th></tr></thead>
+      <tbody>${rows.map(d=>`<tr class="${d[9]==='delayed'?'flag':''}"><td><div class="cell-main">${d[0]}</div><div class="cell-sub">${d[1]}</div></td><td>${d[2]}</td><td>${d[3]}<div class="cell-sub">${d[4]}</div></td><td>${pill(d[5],d[6])}${d[9]==='delayed'?`<div class="cell-sub">${d[1].split('·')[1]||''}</div>`:''}</td><td>${d[7]}</td><td>${d[8]}</td></tr>`).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--text-mute);padding:26px;">No deliveries match this filter.</td></tr>`}</tbody></table></div>
+      <div class="footnote">Showing 1–${rows.length} of ${LOG.deliveries.length} deliveries</div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">Delivery-fee reference</div>
+        <div class="section-sub">Drawn from Logistics' own cost data. The diagnostic recorded lost sales where a fee was quoted late or guessed.</div>
+        ${LOG.fees.map(f=>`<div class="kv-row"><div><div class="k">${f[0]}</div><div class="k-sub">${f[1]}</div></div><div class="v">${f[2]}</div></div>`).join('')}
+        <div class="footnote">Averages of journeys actually run. A new destination still needs a quote from Logistics — but Sales can now see the basis instead of inventing one.</div>
+      </div>
+      <div class="card">
+        <div class="section-title">Vehicles</div>
+        <div class="section-sub">Each van carries its own service record</div>
+        ${LOG.vehicles.map(v=>`<div class="list-row"><div class="list-ic" style="background:var(--purple-light);color:var(--purple-dark);">${ICONS.truck}</div><div class="list-body"><div class="list-title">${v[0]}</div><div class="list-sub">${v[1]}</div></div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderAdmin(){
+  const canEdit = State.role.writes.includes('admin');
+  return `
+  <div class="page-head">
+    <div><h1>Admin</h1><div class="sub">Accounts, HR administration and facilities · Ikeja &amp; Lekki</div></div>
+    <div class="head-actions">
+      <button class="btn btn-outline" onclick="toast('Preparing export…')">${ICONS.export} Export</button>
+      <button class="btn ${canEdit?'btn-dark':'btn-outline'}" ${canEdit?'':'disabled'} onclick="toast('Period closed')">Close period ${ICONS.check}</button>
+    </div>
+  </div>
+  ${!canEdit?`<div class="banner"><span>${ICONS.lock}</span><span><b>Read-only.</b> ${State.role.title} has read access to this module. Changes here belong to ${OWNER_OF.admin}.</span></div>`:''}
+  <div class="banner info"><span>${ICONS.book}</span><span>Financial and HR records here are <b>sample data</b>. The expense lines are the ones the guides separate out by name — import duty, rework and waste, area-boy and security payments — because those are the ones that otherwise disappear into "miscellaneous". <a href="#" onclick="return false;">More on this</a></span></div>
+  <div class="grid4">${ADMIN.stats.map(statCard).join('')}</div>
+  <div class="grid2">
+    <div>
+      <div class="card" style="margin-bottom:18px;">
+        <div class="section-title">Expense lines</div>
+        <div class="section-sub">This period, ₦ thousands — the separated lines the guides ask for</div>
+        ${barChart(ADMIN.expenses.map(e=>({l:e.l,v:e.v,disp:'₦'+e.v+'k'})))}
+      </div>
+      <div class="card">
+        <div class="section-title">Receivables</div>
+        <div class="section-sub">Oldest first. A credit-policy exception is flagged rather than quietly granted.</div>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Amount</th><th>Due</th><th>Status</th></tr></thead>
+        <tbody>${ADMIN.receivables.map(r=>`<tr class="${r[5]?'flag':''}"><td><div class="cell-main ${r[5]?'strike':''}">${r[0]}</div>${r[6]?`<div class="cell-sub">${r[6]}</div>`:''}</td><td>${r[1]}</td><td>${r[2]}</td><td>${pill(r[3],r[4])}</td></tr>`).join('')}</tbody></table></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">Facilities &amp; compliance</div>
+        <div class="section-sub">Safety items with a due date against each</div>
+        ${facilitiesListHTML()}
+      </div>
+      <div class="card">
+        <div class="section-title">HR</div>
+        <div class="section-sub">Ad hoc installers get the same record as permanent staff</div>
+        ${ADMIN.hr.map(h=>`<div class="list-row"><div class="list-ic" style="background:var(--purple-light);color:var(--purple-dark);">${ICONS.users}</div><div class="list-body"><div class="list-tag">${h[0]}</div><div class="list-title">${h[1]} ${pill(h[2],h[3])}</div><div class="list-sub">${h[4]}</div></div></div>`).join('')}
+        <div class="footnote">Installer records were the gap the diagnostic flagged as informal — a phone call and a handshake, with nothing written down.</div>
+      </div>
+    </div>
+  </div>`;
+}
+/* fix facilities render (status pill needs due date under it, redo properly) */
+function facilitiesListHTML(){
+  return ADMIN.facilities.map(f=>`<div class="list-row">
+    <div class="list-ic" style="background:var(--purple-light);color:var(--purple-dark);">${ICONS.shield}</div>
+    <div class="list-body">
+      <div class="list-tag">${f[0]}</div>
+      <div class="list-title">${f[1]} ${pill(f[2],f[3])}</div>
+      <div class="list-sub">${f[4]}</div>
+    </div>
+  </div>`).join('');
+}
+
+/* ============================= INDEX / LOGIN PAGE ============================= */
+function roleCard(r){
+  return `<button class="role-card" onclick="loginAs('${r.id}')">
+    <div class="role-av" style="background:${r.color};">${r.initials}</div>
+    <div class="role-body">
+      <div class="role-name-row"><span class="rn">${r.title}</span>${r.tag?`<span class="role-tr-badge">${r.tag}</span>`:''}</div>
+      <div class="role-person">${r.name} · ${r.reports}</div>
+      <div class="role-blurb">${r.blurb}</div>
+      <div class="role-tags">
+        ${r.readsAll ? `<span class="rtag reads">READS EVERYTHING</span>` : `<span class="rtag writes">WRITES ${r.writeLabel}</span>${r.extraWrite?`<span class="rtag reads">${r.extraWrite}</span>`:''}`}
+      </div>
+    </div>
+    ${ICONS.chevR}
+  </button>`;
+}
+
+function renderIndex(){
+  return `<div class="index-wrap">
+    <div class="hero">
+      <div class="hero-left">
+        <div class="eyebrow">KELLUGS HOME CONCEPTS · LAGOS, SINCE 2011</div>
+        <h1>One system for the whole company.</h1>
+        <p>Sales, the workshop, stock, delivery and customers in one place — so the business stops depending on who remembers what.</p>
+        <div class="hero-stats">
+          <div><b>96</b><span>Products live</span></div>
+          <div><b>2</b><span>Lagos branches</span></div>
+          <div><b>8</b><span>Role dashboards</span></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="door-illustration">
+          <svg viewBox="0 0 300 220" width="100%" height="180">
+            <rect width="300" height="220" fill="#241c46"/>
+            <rect x="80" y="20" width="140" height="185" rx="4" fill="#7a5a2e"/>
+            <rect x="92" y="32" width="52" height="78" rx="2" fill="#5a4020" opacity=".55"/>
+            <rect x="156" y="32" width="52" height="78" rx="2" fill="#5a4020" opacity=".55"/>
+            <rect x="92" y="118" width="116" height="72" rx="2" fill="#5a4020" opacity=".4"/>
+            <circle cx="200" cy="112" r="4.5" fill="#d8c7a1"/>
+          </svg>
+        </div>
+        <div class="door-caption"><b>4FT Single 8 Chromes Side Glass Door</b>₦1,250,000 · the highest-priced item in the live catalogue</div>
+      </div>
+    </div>
+    <div class="index-lower">
+      <div class="login-card">
+        <div class="login-brand"><span class="mark">K</span>Kellugs <span class="os">OS</span></div>
+        <h2>Sign in</h2>
+        <p>One system across sales, operations, admin and support. What you see is scoped to your role.</p>
+        <div class="field"><label>Username</label><input id="loginUser" placeholder="e.g. ops"></div>
+        <div class="field"><label>Password</label><div class="inputwrap"><input id="loginPass" type="password" placeholder="Password"><button class="showtoggle" onclick="togglePw()">Show</button></div></div>
+        <label class="remember"><input type="checkbox" style="width:auto;"> Keep me signed in on this device</label>
+        <button class="signin-btn" onclick="loginAs('admin')">Sign in ${ICONS.chevR}</button>
+        <div class="proto-note">${ICONS.info}<span><b>Prototype sign-in.</b> Credentials are held in <code>js/data.js</code>, which any visitor's browser can read. This chooses which dashboard you are shown — it is not access control. A real deployment moves it to Supabase auth with row-level security, where the server decides.</span></div>
+      </div>
+      <div>
+        <div class="roles-head"><h3>Or open a role directly</h3><p>Eight seats from the Kellugs Home job descriptions and the Transition 2 organisational plan. Each lands on its own dashboard.</p></div>
+        <div class="roles-grid">${ROLES.map(roleCard).join('')}</div>
+        <div class="roles-footnote">Every account uses the password <code>kellugs</code>.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================= SHELL (sidebar + topbar) ============================= */
+function navItemHTML(item, activeId){
+  const canWrite = State.role.writes.includes(item.id);
+  const showLock = !canWrite;
+  return `<li><a href="#/${item.id}" class="nav-item ${activeId===item.id?'active':''}">
+    ${ICONS[item.icon]}<span class="label">${item.label}</span>
+    ${item.badge?`<span class="badge">${item.badge}</span>`:''}
+    ${showLock?`<span class="lock">${ICONS.lock}</span>`:''}
+  </a></li>`;
+}
+
+function sidebarHTML(activeId){
+  return `<aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="mark">K</span>Kellugs</div>
+    ${NAV.map(sec=>`<div class="nav-section-label">${sec.section}</div><ul class="nav-list">${sec.items.map(it=>navItemHTML(it,activeId)).join('')}</ul>`).join('')}
+    <div class="sidebar-footer">
+      <div class="loc">📍 Ikeja &amp; Lekki</div>
+      <div class="phase">Kellugs OS · Phase 1</div>
+    </div>
+  </aside>`;
+}
+
+function topbarHTML(activeId){
+  const r = State.role;
+  return `<div class="topbar">
+    <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <div class="crumb">${CRUMB_OF[activeId]}</div>
+    <div class="search">${ICONS.search}<input placeholder="Search products, leads, jobs...">
+      <kbd>K</kbd><kbd>⌘</kbd>
+    </div>
+    <button class="top-icon-btn" onclick="toast('Help center would open here')">${ICONS.help}</button>
+    <button class="top-icon-btn" id="bellBtn" onclick="toggleBell(event)">${ICONS.bell}<span class="dot"></span>
+      <div class="bell-panel" id="bellPanel">
+        <h4>Notifications</h4>
+        <div class="bell-item"><b>2 items</b> escalated to the CEO from Inventory.</div>
+        <div class="bell-item">Delivery <b>DLV-450</b> is running late — vehicle breakdown.</div>
+        <div class="bell-item">Receivable from <b>Chukwu Properties</b> is 13 days overdue.</div>
+      </div>
+    </button>
+    <div class="user-chip" id="userChip" onclick="toggleUserDD(event)">
+      <div class="avatar" style="background:${r.color};">${r.initials}</div>
+      <div><div class="name">${r.name}</div><div class="role">${r.title}</div></div>
+      <span class="chev">${ICONS.chev}</span>
+      <div class="dropdown" id="userDD">
+        <div class="who"><div class="n">${r.name}</div><div class="r">Read/write on ${r.writes[0] ? r.writes[0][0].toUpperCase()+r.writes[0].slice(1) : 'nothing this period'}</div></div>
+        <div class="dropdown-item" onclick="toast('Roles & access would open here')">${ICONS.users} Roles &amp; access</div>
+        <div class="dropdown-item" onclick="toast('Settings would open here')">${ICONS.gear} Settings</div>
+        <div class="dropdown-item" onclick="toast('Period closed for September')">${ICONS.calendar} Close period <span class="tag">Sep</span></div>
+        <div class="dropdown-item danger" onclick="signOut()">${ICONS.logout} Sign out</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleUserDD(e){ e.stopPropagation(); document.getElementById('userDD').classList.toggle('open'); document.getElementById('bellPanel').classList.remove('open'); }
+function toggleBell(e){ e.stopPropagation(); document.getElementById('bellPanel').classList.toggle('open'); document.getElementById('userDD').classList.remove('open'); }
+document.addEventListener('click', ()=>{
+  const dd = document.getElementById('userDD'); if(dd) dd.classList.remove('open');
+  const bp = document.getElementById('bellPanel'); if(bp) bp.classList.remove('open');
+});
+
+function togglePw(){
+  const p = document.getElementById('loginPass');
+  if(p.type==='password'){ p.type='text'; } else { p.type='password'; }
+}
+
+function loginAs(roleId){
+  const r = ROLES.find(x=>x.id===roleId) || ROLES[5];
+  State.role = r; State.loggedIn = true;
+  safeSet('kellugs_role', r.id); safeSet('kellugs_loggedin','1');
+  location.hash = '#/dashboard';
+}
+function signOut(){
+  State.loggedIn = false;
+  safeSet('kellugs_loggedin','0');
+  location.hash = '#/';
+}
+
+/* ============================= ROUTER ============================= */
+const PAGES = {dashboard:renderDashboard, sales:renderSales, inventory:renderInventory, logistics:renderLogistics, admin:renderAdmin};
+
+function rerender(){ route(); }
+function rerenderKeepFocus(el){
+  const id = el.id;
+  const selStart = el.selectionStart, selEnd = el.selectionEnd;
+  route();
+  requestAnimationFrame(()=>{
+    const again = document.activeElement;
+  });
+}
+
+function route(){
+  const hash = location.hash.replace('#/','') || '';
+  const root = document.getElementById('root');
+  if(!State.loggedIn || hash===''){
+    root.innerHTML = renderIndex();
+    return;
+  }
+  const id = PAGES[hash] ? hash : 'dashboard';
+  const body = PAGES[id]();
+  root.innerHTML = `<div class="app">${sidebarHTML(id)}<main class="main">${topbarHTML(id)}${body}</main></div>`;
+  // restore focus to search inputs after re-render if user was typing
+  window.scrollTo({top:0,behavior:'instant'});
+}
+window.addEventListener('hashchange', route);
+document.addEventListener('DOMContentLoaded', route);
+route();
+</script>
+</body>
+</html>
